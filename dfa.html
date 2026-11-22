@@ -63,18 +63,18 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
 <p><b>Deterministický konečný automat</b> (DFA, z anglického <i>Deterministic Finite Automaton</i>) je jednoduchý model, který pro dané slovo rozhoduje, jestli patří do nějakého jazyka. Nejlépe si jej představíme jako orientovaný graf.</p>
 <p>Orientovaný graf má <b>vrcholy</b> (uzly, říkáme jim také <b>stavy</b>) a mezi nimi <b>hrany</b> se šipkou. Každá hrana je označená písmenem abecedy. Dostaneme slovo a čteme ho zleva doprava po jednom písmenu. Pro každé písmeno projdeme z aktuálního vrcholu hranou, která je jím označená.</p>
 <ul>
-<li><b>Počáteční vrchol</b>: v něm výpočet začíná. Je označený šipkou „odnikud“.</li>
+<li><b>Počáteční vrchol</b>: v něm výpočet začíná. Je označený šipkou „zvenčí“.</li>
 <li><b>Koncové vrcholy</b> (koncové stavy): mají dvojitý okraj.</li>
 <li>Přečteme celé slovo a skončíme v koncovém vrcholu → slovo <b>patří do jazyka</b> (přijímáme ho). Skončíme jinde → <b>nepatří</b> (odmítáme).</li>
-<li>Z aktuálního vrcholu nevede hrana s potřebným písmenem? Výpočet se zasekne a slovo odmítáme.</li>
+<li>Pokud z aktuálního vrcholu nevede hrana s potřebným písmenem, tak se výpočet zasekne a slovo odmítáme.</li>
 </ul>
 <p style="margin:0">Hrany dohromady tvoří <b>přechodovou funkci</b>: z každého vrcholu vede pro každé písmeno nejvýše jedna hrana (proto „deterministický“). Množině všech slov, která automat přijímá, se říká <b>jazyk automatu</b>.</p>
 </div>
 
 <h2>Příklady</h2>
 <div class="tabs">
-  <button id="t0" type="button">1) Konečný jazyk (4 slova)</button>
-  <button id="t1" type="button">2) Nekonečný jazyk (smyčky): obsahuje abb</button>
+  <button id="t0" type="button">1) Konečný jazyk</button>
+  <button id="t1" type="button">2) Nekonečný jazyk</button>
 </div>
 <div class="box">
   <div class="scroll"><svg id="g" viewBox="0 0 640 260" role="img" aria-label="Graf automatu"></svg></div>
@@ -83,7 +83,7 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
   <div class="ctl">
     <input id="inp" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Slovo" placeholder="slovo">
     <button id="load" type="button">Načíst slovo</button>
-    <button id="rnd" type="button">🎲 Náhodné slovo</button>
+    <button id="rnd" type="button">Vybrat náhodné slovo</button>
     <button id="step" type="button">Krok →</button>
     <button id="play" type="button">▶ Spustit</button>
     <button id="reset" type="button">↺ Znovu</button>
@@ -92,7 +92,7 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
 </div>
 
 <h2>Úkoly</h2>
-<p>Nakreslete orientovaný graf (vrcholy a hrany) pro tyto jazyky (abeceda {a, b}, pokud není uvedeno jinak). Poté je ověřte na několika slovech.</p>
+<p>Vezměte si papír a tužku a nakreslete orientovaný graf (vrcholy a hrany) pro tyto jazyky (abeceda {a, b}, pokud není uvedeno jinak).</p>
 <ol>
 <li>Jen slovo <code>aab</code> (nic jiného).</li>
 <li>Právě slova <code>ab</code>, <code>aa</code> a <code>b</code>.</li>
