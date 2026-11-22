@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Piny III: Joystick – Jaroška</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
+h1{font-size:30px;font-weight:500;margin:0}
+h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+a{color:var(--acc)}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.task{border-left:4px solid var(--acc);margin:12px 0}
+.task b{color:var(--acc);display:block}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;border-radius:8px;background:#fff}
+.demo{display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center}
+.base{fill:var(--bg);stroke:var(--line);stroke-width:3}
+.knob{fill:var(--acc)}
+.cross{stroke:var(--line);stroke-width:2}
+.led{display:grid;grid-template-columns:repeat(5,28px);gap:5px;background:#10161D;padding:10px;border-radius:10px}
+.led i{width:28px;height:28px;border-radius:4px;background:#2A1A1A}
+.led i.on{background:#FF3B30;box-shadow:0 0 8px #FF3B30}
+.val{font:500 18px monospace;min-width:150px}
+.muted{color:var(--muted);font-size:14px}
+footer{color:var(--muted);font-size:13px;margin-top:40px}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+  <h1>Piny III: Joystick</h1>
+  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+</div>
+<p><a href="tercie.html">← zpět na Tercii</a></p>
+
+<h2>Potřebné součásti</h2>
+<ul>
+<li>samozřejmě micro:bit</li>
+<li>rozšiřující deska</li>
+<li>modul joysticku <i>(Keyestudio Joystick Module)</i></li>
+<li>propojovací vodiče (drátky) × 5</li>
+</ul>
+
+<h2>Fungování joysticku</h2>
+<p>Joystick obsahuje dva potenciometry: jeden měří vychýlení páky doleva a doprava (osa <b>X</b>), druhý nahoru a dolů (osa <b>Y</b>). Micro:bit z každého přečte číslo od <b>0</b> do <b>1023</b>. Když je páka uprostřed, vychází přibližně <b>512</b>. Čím víc páku vychýlíte, tím víc se číslo blíží k 0 nebo k 1023.</p>
+
+<div class="box">
+  <div class="demo">
+    <svg id="stick" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Animace pohybu páky joysticku">
+      <rect class="base" x="10" y="10" width="180" height="180" rx="16"/>
+      <line class="cross" x1="100" y1="20" x2="100" y2="180"/><line class="cross" x1="20" y1="100" x2="180" y2="100"/>
+      <circle id="knob" class="knob" cx="100" cy="100" r="26"/>
+    </svg>
+    <div>
+      <div class="val" id="vx">X = 512</div>
+      <div class="val" id="vy">Y = 512</div>
+      <div class="val" id="vd" style="color:var(--muted)">prázdný displej</div>
+    </div>
+    <div class="led" id="led" aria-label="Displej micro:bitu"></div>
+  </div>
+  <p class="muted" style="margin:12px 0 8px">Ukázka se přehrává sama: páka se postupně vychyluje a displej micro:bitu ukazuje šipku. Malé zachvění kolem středu (hodnoty 362 až 662) se nebere v úvahu. Směry u vašeho modulu mohou být opačné, to zjistíte v úloze 1.</p>
+  <button id="pp" type="button">⏸ Pauza</button>
+</div>
+
+<h2>Zapojení joysticku k micro:bitu</h2>
+<p>Modul má pět vývodů: <b>G</b> (zem), <b>V</b> (napájení), <b>B</b> (tlačítko), <b>X</b> a <b>Y</b> (osy). Drátky zapojte takto:</p>
+<div class="scroll"><table>
+<tr><th>Vývod joysticku</th><th>Barva vodiče (drátku)</th><th>Pin na desce</th></tr>
+<tr><td>G (zem)</td><td>šedý</td><td>G</td></tr>
+<tr><td>V (napájení)</td><td>červený</td><td>V</td></tr>
+<tr><td>B (tlačítko)</td><td>fialový</td><td>P2 (S)</td></tr>
+<tr><td>X (vlevo/vpravo)</td><td>zelený</td><td>P1 (S)</td></tr>
+<tr><td>Y (nahoru/dolů)</td><td>modrý</td><td>P0 (S)</td></tr>
+</table></div>
+<p><img src="joystick.jpeg" alt="Schéma zapojení joysticku k micro:bitu"></p>
+
+<h2>Úlohy</h2>
+<div class="box task"><b>Úloha 1: Čísla</b>Naprogramujte micro:bit tak, aby na displeji ukazoval číslo přečtené z osy X. Zjistěte, jaké číslo vychází uprostřed, úplně vlevo a úplně vpravo. Pak totéž udělejte s osou Y. Zapište si, které číslo odpovídá kterému směru.</div>
+<div class="box task"><b>Úloha 2: Šipky</b>Naprogramujte micro:bit tak, aby podle vychýlení páky ukázal na displeji šipku správným směrem (nahoru, dolů, doleva, doprava). Když je páka uprostřed, displej je prázdný. Zkuste najít takové hranice, aby joystick nereagoval na malé zachvění.</div>
+<div class="box task"><b>Úloha 3: Tečka</b>Na displeji svítí jedna tečka. Pohybem joysticku ji posouvejte po displeji a hlídejte, aby nevyjela mimo (souřadnice jsou 0 až 4). Stisk páky tečku vrátí doprostřed.</div>
+
+<footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+</main>
+<script>
+(function(){
+var P={u:"..#..;.###.;#.#.#;..#..;..#..",d:"..#..;..#..;#.#.#;.###.;..#..",
+l:"..#..;.#...;#####;.#...;..#..",r:"..#..;...#.;#####;...#.;..#.."};
+var NAME={u:"šipka nahoru",d:"šipka dolů",l:"šipka doleva",r:"šipka doprava"};
+var led=document.getElementById("led"),cells=[];
+for(var i=0;i<25;i++){var c=document.createElement("i");led.appendChild(c);cells.push(c)}
+// waypoints [x,y]; střed 512, krátké zachvění, pak čtyři směry
+var W=[[512,512],[540,490],[512,512],[1023,512],[512,512],[512,0],[512,512],[0,512],[512,512],[512,1023],[512,512],[480,540]];
+var T=1100,pause=false,t0=null,acc=0,last=null,shown="";
+var knob=document.getElementById("knob"),vx=document.getElementById("vx"),vy=document.getElementById("vy"),vd=document.getElementById("vd");
+function dir(x,y){var dx=x-512,dy=y-512;if(Math.abs(dx)<150&&Math.abs(dy)<150)return"";
+ return Math.abs(dx)>Math.abs(dy)?(dx>0?"r":"l"):(dy>0?"d":"u")}
+function show(d){if(d===shown)return;shown=d;
+ var rows=d?P[d].split(";"):[];
+ for(var r=0;r<5;r++)for(var c=0;c<5;c++)cells[r*5+c].className=(rows[r]&&rows[r][c]==="#")?"on":"";
+ vd.textContent=d?NAME[d]:"prázdný displej"}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+function frame(ts){
+ if(last===null)last=ts;var dt=ts-last;last=ts;
+ if(!pause)acc+=dt;
+ var seg=Math.floor(acc/T)%W.length,f=ease((acc%T)/T),a=W[seg],b=W[(seg+1)%W.length];
+ var x=Math.round(a[0]+(b[0]-a[0])*f),y=Math.round(a[1]+(b[1]-a[1])*f);
+ knob.setAttribute("cx",100+(x-512)/512*55);knob.setAttribute("cy",100+(y-512)/512*55);
+ vx.textContent="X = "+x;vy.textContent="Y = "+y;show(dir(x,y));
+ requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+document.getElementById("pp").onclick=function(){pause=!pause;this.textContent=pause?"▶ Spustit":"⏸ Pauza"};
+
+var btn=document.getElementById("theme"),root=document.documentElement;
+function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function pt(){btn.textContent=th()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=th()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}pt()};
+pt();
+})();
+</script>
+</body>
+</html>
