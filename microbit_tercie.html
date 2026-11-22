@@ -18,7 +18,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
-main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;min-height:100vh;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
 .top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
 h1{font-size:32px;font-weight:500;margin:0}
 .author{margin:0 0 4px;font-size:17px;font-weight:500;color:var(--acc)}
@@ -36,7 +36,7 @@ a.card:hover{border-color:var(--acc)}
 .big{padding:22px 18px}
 .big b{font-size:22px}
 .empty{border-style:dashed;color:var(--muted);font-size:14px}
-footer{color:var(--muted);font-size:13px;margin-top:40px}
+footer{color:var(--muted);font-size:13px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
 footer a:hover{color:var(--acc)}
 </style>
