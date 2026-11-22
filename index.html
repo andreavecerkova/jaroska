@@ -21,12 +21,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex 
 main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
 .top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
 h1{font-size:32px;font-weight:500;margin:0}
-.stickers{display:inline-flex;gap:8px;vertical-align:middle;margin-left:14px}
-.sticker{width:44px;height:44px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
-.sticker:nth-child(1){transform:rotate(-9deg)}
-.sticker:nth-child(2){transform:rotate(7deg) translateY(3px)}
-.sticker circle{fill:var(--acc)}
-.sticker path{fill:none;stroke:var(--card);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.stickers{display:inline-flex;align-items:center;gap:12px;vertical-align:middle;margin-left:16px}
+.stickers svg{display:block;overflow:visible;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+.stickers path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.stickers .o{stroke:#fff}
+.stickers .b{stroke:var(--acc)}
+.s1 .o{stroke-width:15}.s1 .b{stroke-width:7}
+.s2 .o{stroke-width:30}.s2 .b{stroke-width:14}
 .author{margin:0 0 4px;font-size:17px;font-weight:500;color:var(--acc)}
 .sub{color:var(--muted);margin:0 0 28px;max-width:60ch}
 button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap;flex:none}
@@ -51,8 +52,14 @@ footer a:hover{color:var(--acc)}
 <main>
 <div class="top">
   <h1>Jaroška <span class="stickers" aria-hidden="true">
-    <svg class="sticker" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28"/><path d="M22 15v14M37 15v14M16 37Q30 53 44 37"/></svg>
-    <svg class="sticker" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28"/><path d="M29 18q6-3 11 0M29 26q6-3 11 0M17 36q3 12 14 8q7-3 9-8"/></svg>
+    <svg class="s1" viewBox="0 0 120 160" height="52">
+      <g id="sm1"><path class="o" d="M52 17L55 70M83 15L85 65M20 103Q60 150 98 100"/></g>
+      <path class="b" d="M52 17L55 70M83 15L85 65M20 103Q60 150 98 100"/>
+    </svg>
+    <svg class="s2" viewBox="0 0 380 440" height="60">
+      <path class="o" d="M150 420C60 390 15 320 22 230C28 130 90 40 250 18C320 12 360 70 355 140C350 230 300 300 230 335C200 350 150 360 70 365M168 123Q190 118 210 135M190 160Q215 165 230 195M100 240C100 275 140 275 170 245C195 225 215 205 225 185"/>
+      <path class="b" d="M150 420C60 390 15 320 22 230C28 130 90 40 250 18C320 12 360 70 355 140C350 230 300 300 230 335C200 350 150 360 70 365M168 123Q190 118 210 135M190 160Q215 165 230 195M100 240C100 275 140 275 170 245C195 225 215 205 225 185"/>
+    </svg>
   </span></h1>
   <!-- <h1>Jaroška</h1> -->
   <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
