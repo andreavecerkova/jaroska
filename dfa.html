@@ -146,7 +146,7 @@ function build(){
   var t=mk("text",{x:A.x[i],y:A.y[i],class:"lbl"},g);t.textContent=n;return c});
  document.getElementById("hint").textContent=A.hint;
  document.getElementById("t0").className=cur==0?"on":"";document.getElementById("t1").className=cur==1?"on":"";
- load("");inp.value="";
+ var w0=pickAcc();inp.value=w0;load(w0);
 }
 function paint(){
  nodes.forEach(function(c,i){c.setAttribute("class","nd"+(i==st&&!stuck?" act":"")+(i==st&&stuck?" bad":""))});
@@ -171,6 +171,7 @@ function stop(){if(timer){clearInterval(timer);timer=null}document.getElementByI
 function ok(w){return /^[ab]*$/.test(w)}
 document.getElementById("load").onclick=function(){var w=inp.value.trim();if(!ok(w)){msg.className="msg no";msg.textContent="Použijte jen písmena a a b.";return}load(w)};
 inp.onkeydown=function(e){if(e.key==="Enter")document.getElementById("load").onclick()};
+function pickAcc(){var all=[""],i=0,y=[];while(i<all.length){var w=all[i++];if(acc(w))y.push(w);if(w.length<7){all.push(w+"a");all.push(w+"b")}}return y[Math.floor(Math.random()*y.length)]}
 function acc(w){var q=A.start;for(var i=0;i<w.length;i++){var d=delta[q+w[i]];if(!d)return false;q=d[0]}return A.fin.indexOf(q)>=0}
 document.getElementById("rnd").onclick=function(){
  var all=[""],i=0,y=[],n=[];
@@ -189,7 +190,7 @@ document.getElementById("play").onclick=function(){
 };
 document.getElementById("t0").onclick=function(){cur=0;build()};
 document.getElementById("t1").onclick=function(){cur=1;build()};
-build();inp.value="abab";document.getElementById("load").onclick();
+build();
 
 var btn=document.getElementById("theme"),root=document.documentElement;
 function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
