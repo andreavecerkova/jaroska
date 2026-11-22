@@ -173,10 +173,13 @@ document.getElementById("load").onclick=function(){var w=inp.value.trim();if(!ok
 inp.onkeydown=function(e){if(e.key==="Enter")document.getElementById("load").onclick()};
 function pickAcc(){var all=[""],i=0,y=[];while(i<all.length){var w=all[i++];if(acc(w))y.push(w);if(w.length<7){all.push(w+"a");all.push(w+"b")}}return y[Math.floor(Math.random()*y.length)]}
 function acc(w){var q=A.start;for(var i=0;i<w.length;i++){var d=delta[q+w[i]];if(!d)return false;q=d[0]}return A.fin.indexOf(q)>=0}
+var last=[];
 document.getElementById("rnd").onclick=function(){
  var all=[""],i=0,y=[],n=[];
  while(i<all.length){var w=all[i++];(acc(w)?y:n).push(w);if(w.length<7){all.push(w+"a");all.push(w+"b")}}
- var l=(Math.random()<.5&&y.length)?y:n;
+ var wantY=Math.random()<.5;if(last.length>1&&last[0]===last[1])wantY=!last[0];
+ last.unshift(wantY);last.length=2;
+ var l=wantY?y:n;
  var w=l[Math.floor(Math.random()*l.length)];
  inp.value=w;load(w)};
 document.getElementById("step").onclick=function(){stop();step()};
