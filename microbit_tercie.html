@@ -9,48 +9,94 @@ if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-sche
 document.documentElement.setAttribute("data-theme",t)})();
 </script>
 <title>Micro:bit (tercie) – Jaroška</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lmroman-bold.otf") format("opentype")}
+
+:root{
+  --bg:#EEF3FB;--card:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;
+  --glass:rgba(255,255,255,.62);--glass-line:rgba(255,255,255,.9);--shadow:0 10px 40px rgba(36,86,166,.16);
+  --g1:rgba(61,123,255,.32);--g2:rgba(120,190,255,.38);--g3:rgba(36,86,166,.18);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}
+
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
-main{max-width:980px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;min-height:100vh;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
-.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
-h1{font-size:32px;font-weight:500;margin:0}
-.author{margin:0 0 4px;font-size:17px;font-weight:500;color:var(--acc)}
-.sub{color:var(--muted);margin:0 0 28px;max-width:60ch}
-button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap;flex:none}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif;
+  display:flex;flex-direction:column;min-height:100vh;
+  min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+/* modré „aurora“ pozadí – je pevné, takže se nehýbe při scrollování */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60vmax 45vmax at 8% 0%,var(--g1),transparent 60%),
+    radial-gradient(55vmax 40vmax at 100% 18%,var(--g2),transparent 60%),
+    radial-gradient(50vmax 40vmax at 40% 105%,var(--g3),transparent 60%)}
+
+main{flex:1;width:100%;max-width:980px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column}
+
+/* hlavička jako rámeček */
+.frame{background:var(--glass);border:1px solid var(--glass-line);border-radius:22px;
+  padding:20px 24px 22px;margin:0 0 36px;box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+h1{font-size:38px;line-height:1.25;font-weight:700;margin:0}
+.back{display:inline-block;margin:0;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+.soon{border-style:dashed}
+.soon b{color:var(--ink)}
+.sub{color:var(--muted);margin:0;max-width:75ch}
+.sub a{color:var(--acc)}
+
+button{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap;flex:none}
+button:hover{border-color:var(--acc)}
 button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-section{margin:0 0 32px}
-h2{font-size:20px;font-weight:500;margin:0 0 4px}
-.hint{color:var(--muted);font-size:14px;margin:0 0 12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:inherit;text-decoration:none}
-a.card:hover{border-color:var(--acc)}
-.card b{display:block;font-weight:500;color:var(--acc);margin-bottom:2px}
-.card span{color:var(--muted);font-size:14px}
-.big{padding:22px 18px}
-.big b{font-size:22px}
-.empty{border-style:dashed;color:var(--muted);font-size:14px}
-footer{color:var(--muted);font-size:13px;margin-top:auto;padding-top:40px}
+
+section{margin:0 0 34px}
+h2{font-size:24px;font-weight:700;margin:0 0 8px}
+.hint{color:var(--muted);font-size:16px;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{display:block;background:var(--glass);border:1px solid var(--glass-line);border-radius:18px;padding:16px 18px;color:inherit;text-decoration:none;
+  box-shadow:0 4px 18px rgba(36,86,166,.10);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:border-color .15s,transform .15s}
+a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card b{display:block;font-weight:700;color:var(--acc);margin-bottom:2px}
+.card span{color:var(--muted);font-size:16px}
+.big{padding:24px 20px}
+.big b{font-size:26px;line-height:1.25}
+.empty{border-style:dashed;color:var(--muted);font-size:16px}
+
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
 footer a:hover{color:var(--acc)}
+
+:root[data-theme="dark"] .card{box-shadow:0 4px 18px rgba(0,0,0,.35)}
+:root[data-theme="dark"] .frame,:root[data-theme="dark"] .card{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:32px}}
 </style>
 </head>
 <body>
 <main>
-<div class="top">
-  <h1>Micro:bit (tercie)</h1>
-  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
-</div>
-<p class="sub"><a href="tercie.html" style="color:var(--acc)">← zpět na Tercii</a></p>
 
-<p class="sub" style="max-width:none">V hodinách používáme stránku <a href="https://makecode.microbit.org/" target="_blank" rel="noopener" style="color:var(--acc)">MakeCode</a>. Přihlaste se tam, ať se vám práce uloží. Kdo chce, může zkusit pracovat přímo v <a href="https://python.microbit.org/v/3" target="_blank" rel="noopener" style="color:var(--acc)">Pythonu</a>.</p>
-  
+<header class="frame">
+  <div class="top">
+    <a class="back" href="tercie.html">← Zpět na Tercii</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
+  <h1>Micro:bit (tercie)</h1>
+  <p class="sub">V hodinách používáme stránku <a href="https://makecode.microbit.org/" target="_blank" rel="noopener">MakeCode</a>. Přihlaste se tam, ať se vám práce uloží. Kdo chce, může zkusit pracovat přímo v <a href="https://python.microbit.org/v/3" target="_blank" rel="noopener">Pythonu</a>.</p>
+</header>
+
 <section>
   <h2>Vyberte téma</h2>
   <div class="cards">
@@ -60,6 +106,7 @@ footer a:hover{color:var(--acc)}
 
 <footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
 </main>
+
 <script>
 (function(){
 var btn=document.getElementById("theme"),root=document.documentElement;
@@ -70,5 +117,6 @@ paint();
 })();
 </script>
 </body>
-</html> -->
-<!-- 
+</html>
+
+
