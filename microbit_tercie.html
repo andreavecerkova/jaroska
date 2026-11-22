@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Micro:bit (tercie) – Jaroška</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
+h1{font-size:32px;font-weight:500;margin:0}
+.author{margin:0 0 4px;font-size:17px;font-weight:500;color:var(--acc)}
+.sub{color:var(--muted);margin:0 0 28px;max-width:60ch}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap;flex:none}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+section{margin:0 0 32px}
+h2{font-size:20px;font-weight:500;margin:0 0 4px}
+.hint{color:var(--muted);font-size:14px;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:inherit;text-decoration:none}
+a.card:hover{border-color:var(--acc)}
+.card b{display:block;font-weight:500;color:var(--acc);margin-bottom:2px}
+.card span{color:var(--muted);font-size:14px}
+.big{padding:22px 18px}
+.big b{font-size:22px}
+.empty{border-style:dashed;color:var(--muted);font-size:14px}
+footer{color:var(--muted);font-size:13px;margin-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+  <h1>Micro:bit (tercie)</h1>
+  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+</div>
+<p class="sub"><a href="tercie.html" style="color:var(--acc)">← zpět na Tercii</a></p>
+
+<section>
+  <h2>Vyberte téma</h2>
+  <div class="cards">
+    <a class="card" href="joystick.html"><b>Piny III: Joystick</b><span>Zapojení joysticku, čtení souřadnic X a Y a ovládání displeje.</span></a>
+  </div>
+</section>
+
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+</main>
+<script>
+(function(){
+var btn=document.getElementById("theme"),root=document.documentElement;
+function cur(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function paint(){btn.textContent=cur()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=cur()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}paint()};
+paint();
+})();
+</script>
+</body>
+</html>
