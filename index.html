@@ -21,6 +21,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex 
 main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
 .top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
 h1{font-size:32px;font-weight:500;margin:0}
+.stickers{display:inline-flex;gap:8px;vertical-align:middle;margin-left:14px}
+.sticker{width:44px;height:44px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.sticker:nth-child(1){transform:rotate(-9deg)}
+.sticker:nth-child(2){transform:rotate(7deg) translateY(3px)}
+.sticker circle{fill:var(--acc)}
+.sticker path{fill:none;stroke:var(--card);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .author{margin:0 0 4px;font-size:17px;font-weight:500;color:var(--acc)}
 .sub{color:var(--muted);margin:0 0 28px;max-width:60ch}
 button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap;flex:none}
@@ -44,7 +50,11 @@ footer a:hover{color:var(--acc)}
 <body>
 <main>
 <div class="top">
-  <h1>Jaroška</h1>
+  <h1>Jaroška <span class="stickers" aria-hidden="true">
+    <svg class="sticker" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28"/><path d="M22 15v14M37 15v14M16 37Q30 53 44 37"/></svg>
+    <svg class="sticker" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28"/><path d="M29 18q6-3 11 0M29 26q6-3 11 0M17 36q3 12 14 8q7-3 9-8"/></svg>
+  </span></h1>
+  <!-- <h1>Jaroška</h1> -->
   <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
 </div>
 <p class="author">Andrea Večerková</p>
