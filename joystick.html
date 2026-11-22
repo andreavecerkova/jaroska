@@ -98,6 +98,23 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
 <div class="box task"><b>Úloha 2: Šipky</b>Naprogramujte micro:bit tak, aby podle vychýlení páky ukázal na displeji šipku správným směrem (nahoru, dolů, doleva, doprava). Když je páka uprostřed, displej je prázdný. Zkuste najít takové hranice, aby joystick nereagoval na malé zachvění. (viz animace výše)</div>
 <div class="box task"><b>Úloha 3: Tečka</b>Na displeji svítí jedna tečka. Pohybem joysticku ji posouvejte po displeji a hlídejte, aby nevyjela mimo (souřadnice jsou 0 až 4). Stisk páky tečku vrátí doprostřed.</div>
 
+<div class="box">
+  <div class="demo">
+    <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Animace pohybu páky joysticku">
+      <rect class="base" x="10" y="10" width="180" height="180" rx="16"/>
+      <line class="cross" x1="100" y1="20" x2="100" y2="180"/><line class="cross" x1="20" y1="100" x2="180" y2="100"/>
+      <circle id="knob2" class="knob" cx="100" cy="100" r="26" style="transition:cx .35s,cy .35s"/>
+    </svg>
+    <div>
+      <div class="val" id="p3c">x = 2, y = 2</div>
+      <div class="val" id="p3m" style="color:var(--muted);font-size:15px;min-width:190px">střed displeje</div>
+    </div>
+    <div class="led" id="led2" aria-label="Displej micro:bitu"></div>
+  </div>
+  <p class="muted" style="margin:12px 0 8px">Ukázka se přehrává sama: páka posouvá tečku po displeji, na okraji se tečka zastaví a stisk páky ji vrátí doprostřed. Zkuste zjistit, jak bude vypadat váš program.</p>
+  <button id="pp2" type="button">Pauza</button>
+</div>
+
 <footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
 </main>
 <script>
@@ -128,6 +145,24 @@ function frame(ts){
  requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
 document.getElementById("pp").onclick=function(){pause=!pause;this.textContent=pause?"▶ Spustit":"⏸ Pauza"};
+
+// úloha 3: tečka
+(function(){
+var L=document.getElementById("led2"),C=[];for(var i=0;i<25;i++){var c=document.createElement("i");L.appendChild(c);C.push(c)}
+var S="r r r d d d l l l l l u u u u u B".split(" "),D={r:[1,0],l:[-1,0],u:[0,-1],d:[0,1],B:[0,0]};
+var NM={r:"doprava",l:"doleva",u:"nahoru",d:"dolů",B:"stisk páky"};
+var x=2,y=2,n=0,pz=false,k=document.getElementById("knob2");
+function draw(){C.forEach(function(e,j){e.className=(j===y*5+x)?"on":""});
+ document.getElementById("p3c").textContent="x = "+x+", y = "+y}
+function tick(){if(pz)return;var c=S[n%S.length];n++;var d=D[c],msg;
+ k.style.fill=c==="B"?"var(--new)":"";
+ k.setAttribute("cx",100+d[0]*55);k.setAttribute("cy",100+d[1]*55);
+ if(c==="B"){x=2;y=2;msg="páka stisknuta → tečka zpět doprostřed"}
+ else{var nx=x+d[0],ny=y+d[1];if(nx<0||nx>4||ny<0||ny>4)msg="páka "+NM[c]+": okraj, tečka zůstává";else{x=nx;y=ny;msg="páka "+NM[c]+" → tečka se posune"}}
+ document.getElementById("p3m").textContent=msg;draw()}
+draw();setInterval(tick,900);
+document.getElementById("pp2").onclick=function(){pz=!pz;this.textContent=pz?"▶ Spustit":"⏸ Pauza"};
+})();
 
 var btn=document.getElementById("theme"),root=document.documentElement;
 function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
