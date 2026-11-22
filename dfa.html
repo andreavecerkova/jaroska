@@ -9,56 +9,71 @@ if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-sche
 document.documentElement.setAttribute("data-theme",t)})();
 </script>
 <title>DFA – deterministické konečné automaty – Jaroška</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lmroman-bold.otf") format("opentype")}
+
+:root{--bg:#EEF3FB;--card:#fff;--btn:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+--shadow:0 10px 40px rgba(36,86,166,.14);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
-main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
-.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
-h1{font-size:30px;font-weight:500;margin:0}
-h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;min-height:100vh;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+/* hlavička jako rámeček */
+.frame{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 24px 20px;margin:0 0 8px;box-shadow:var(--shadow)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+.back{display:inline-block;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+h1{font-size:34px;line-height:1.25;font-weight:700;margin:0}
+h2{font-size:24px;font-weight:700;margin:32px 0 8px}
 a{color:var(--acc)}
-button,input{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px}
+button,input{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:999px;padding:4px 11px}
+input{font-size:17px;width:150px;letter-spacing:2px;padding:4px 14px}
 button{cursor:pointer;white-space:nowrap}
+button:hover{border-color:var(--acc)}
 button.on{border-color:var(--acc);color:var(--acc)}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
 .tabs,.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
-input{width:150px;letter-spacing:2px}
 .scroll{overflow-x:auto}
 svg{width:100%;min-width:480px;height:auto;display:block}
 .nd{fill:var(--card);stroke:var(--ink);stroke-width:2}
 .nd.act{fill:var(--acc);stroke:var(--acc)}
 .nd.act+text{fill:var(--card)}
 .nd.bad{fill:var(--new);stroke:var(--new)}
-.lbl{fill:var(--ink);font:500 15px "IBM Plex Sans",sans-serif;text-anchor:middle;dominant-baseline:central}
+.lbl{fill:var(--ink);font:700 17px "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif;text-anchor:middle;dominant-baseline:central}
 .ed{fill:none;stroke:var(--muted);stroke-width:2}
 .ed.act{stroke:var(--new);stroke-width:4}
-.el{fill:var(--acc);font:500 17px "IBM Plex Sans",sans-serif;text-anchor:middle;dominant-baseline:central}
-.word{font:500 22px monospace;letter-spacing:4px;min-height:34px}
+.el{fill:var(--acc);font:700 19px "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif;text-anchor:middle;dominant-baseline:central}
+.word{font:700 22px monospace;letter-spacing:4px;min-height:34px}
 .word .r{color:var(--muted)}.word .c{color:var(--new);text-decoration:underline}
-.msg{min-height:26px;font-weight:500}
+.msg{min-height:26px;font-weight:700}
 .ok{color:var(--ok)}.no{color:var(--new)}
-.muted{color:var(--muted);font-size:14px}
+.muted{color:var(--muted);font-size:16px}
 ol li,ul li{margin:6px 0}
 details{margin-top:4px;color:var(--muted)}
-footer{color:var(--muted);font-size:13px;margin-top:40px}
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:28px}}
 </style>
 </head>
 <body>
 <main>
-<div class="top">
+<header class="frame">
+  <div class="top">
+    <a class="back" href="navic.html">← Zpět na Další materiály</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
   <h1>DFA: deterministické konečné automaty</h1>
-  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
-</div>
-<p><a href="navic.html">← zpět na Další materiály</a></p>
+</header>
 
-<h2 style="margin-top:20px">Co to je?</h2>
+<h2>Co to je?</h2>
 <div class="box">
 <p><b>Deterministický konečný automat</b> (DFA, z anglického <i>Deterministic Finite Automaton</i>) je jednoduchý model, který pro dané slovo rozhoduje, jestli patří do nějakého jazyka. Nejlépe si jej představíme jako orientovaný graf.</p>
 <p>Orientovaný graf má <b>vrcholy</b> (uzly, říkáme jim také <b>stavy</b>) a mezi nimi <b>hrany</b> se šipkou. Každá hrana je označená písmenem abecedy. Dostaneme slovo a čteme ho zleva doprava po jednom písmenu. Pro každé písmeno projdeme z aktuálního vrcholu hranou, která je jím označená.</p>
@@ -103,7 +118,7 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
 <li>Těžší: slova, která <b>neobsahují</b> <code>ab</code>. Zkuste začít automatem z úkolu 6.</li>
 </ol>
 
-<footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
 </main>
 
 <script>
@@ -153,7 +168,7 @@ function paint(){
  edges.forEach(function(e,i){e.setAttribute("class","ed"+(i===from?" act":""))});
  var h="";
  for(var i=0;i<word.length;i++)h+='<span class="'+(i<pos?"r":i==pos&&!stuck?"c":"")+'">'+word[i]+'</span>';
- wordEl.innerHTML=h||'<span class="muted" style="font:14px sans-serif;letter-spacing:0">(prázdné slovo)</span>';
+ wordEl.innerHTML=h||'<span class="muted" style="font-size:16px;letter-spacing:0">(prázdné slovo)</span>';
  if(stuck){msg.className="msg no";msg.textContent="Z vrcholu "+A.n[st]+" nevede hrana pro písmeno „"+word[pos]+"“ → výpočet se zasekl, slovo odmítáme."}
  else if(pos==word.length){var ok=A.fin.indexOf(st)>=0;msg.className="msg "+(ok?"ok":"no");
   msg.textContent=ok?"Slovo je přečtené a nacházíme se v koncovém vrcholu → PŘIJATO ✓":"Slovo je přečtené, ale nenacházíme se v koncovém vrcholu → ODMÍTNUTO ✗"}
