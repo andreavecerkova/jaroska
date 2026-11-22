@@ -33,8 +33,12 @@ h2{font-size:20px;font-weight:500;margin:0 0 4px}
 a.card:hover{border-color:var(--acc)}
 .card b{display:block;font-weight:500;color:var(--acc);margin-bottom:2px}
 .card span{color:var(--muted);font-size:14px}
+.big{padding:22px 18px}
+.big b{font-size:22px}
 .empty{border-style:dashed;color:var(--muted);font-size:14px}
 footer{color:var(--muted);font-size:13px;margin-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
 </style>
 </head>
 <body>
@@ -46,22 +50,11 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
 <p class="author">Andrea Večerková</p>
 <p class="sub">Informatika pro tercii a kvartu: materiály a interaktivní animace, které si můžete zkoušet sami.</p>
 
-<section id="tercie">
-  <h2>Tercie</h2>
-  <p class="hint">Materiály pro tercii</p>
+<section id="rocniky">
+  <h2>Vyber ročník</h2>
   <div class="cards">
-    <div class="card empty">Zatím tu nic není, brzy přibude.</div>
-    <!-- Nová karta: zkopíruj řádek níže, změň odkaz a text
-    <a class="card" href="tercie/zlomky.html"><b>Název tématu</b><span>Krátký popis, co se tu dozvíš.</span></a>
-    -->
-  </div>
-</section>
-
-<section id="kvarta">
-  <h2>Kvarta</h2>
-  <p class="hint">Materiály pro kvartu</p>
-  <div class="cards">
-    <div class="card empty">Zatím tu nic není, brzy přibude.</div>
+    <a class="card big" href="tercie.html"><b>Tercie</b><span>Materiály a úkoly pro tercii →</span></a>
+    <a class="card big" href="kvarta.html"><b>Kvarta</b><span>Materiály a úkoly pro kvartu →</span></a>
   </div>
 </section>
 
@@ -73,7 +66,7 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
   </div>
 </section>
 
-<footer>Jaroška · Andrea Večerková</footer>
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
 </main>
 
 <script>
