@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>DFA – deterministické konečné automaty – Jaroška</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
+h1{font-size:30px;font-weight:500;margin:0}
+h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+a{color:var(--acc)}
+button,input{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px}
+button{cursor:pointer;white-space:nowrap}
+button.on{border-color:var(--acc);color:var(--acc)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tabs,.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+input{width:150px;letter-spacing:2px}
+.scroll{overflow-x:auto}
+svg{width:100%;min-width:480px;height:auto;display:block}
+.nd{fill:var(--card);stroke:var(--ink);stroke-width:2}
+.nd.act{fill:var(--acc);stroke:var(--acc)}
+.nd.act+text{fill:var(--card)}
+.nd.bad{fill:var(--new);stroke:var(--new)}
+.lbl{fill:var(--ink);font:500 15px "IBM Plex Sans",sans-serif;text-anchor:middle;dominant-baseline:central}
+.ed{fill:none;stroke:var(--muted);stroke-width:2}
+.ed.act{stroke:var(--new);stroke-width:4}
+.el{fill:var(--acc);font:500 17px "IBM Plex Sans",sans-serif;text-anchor:middle;dominant-baseline:central}
+.word{font:500 22px monospace;letter-spacing:4px;min-height:34px}
+.word .r{color:var(--muted)}.word .c{color:var(--new);text-decoration:underline}
+.msg{min-height:26px;font-weight:500}
+.ok{color:var(--ok)}.no{color:var(--new)}
+.muted{color:var(--muted);font-size:14px}
+ol li,ul li{margin:6px 0}
+details{margin-top:4px;color:var(--muted)}
+footer{color:var(--muted);font-size:13px;margin-top:40px}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+  <h1>DFA: deterministické konečné automaty</h1>
+  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+</div>
+<p><a href="index.html">← zpět na přehled</a></p>
+
+<h2 style="margin-top:20px">Co to je?</h2>
+<div class="box">
+<p><b>Deterministický konečný automat</b> (DFA, z anglického <i>Deterministic Finite Automaton</i>) je jednoduchý model, který pro dané slovo rozhoduje, jestli patří do nějakého jazyka. Nejlépe si jej představíme jako orientovaný graf.</p>
+<p>Orientovaný graf má <b>vrcholy</b> (uzly, říkáme jim také <b>stavy</b>) a mezi nimi <b>hrany</b> se šipkou. Každá hrana je označená písmenem abecedy. Dostaneme slovo a čteme ho zleva doprava po jednom písmenu. Pro každé písmeno projdeme z aktuálního vrcholu hranou, která je jím označená.</p>
+<ul>
+<li><b>Počáteční vrchol</b>: v něm výpočet začíná. Je označený šipkou „odnikud“.</li>
+<li><b>Koncové vrcholy</b> (koncové stavy): mají dvojitý okraj.</li>
+<li>Přečteme celé slovo a skončíme v koncovém vrcholu → slovo <b>patří do jazyka</b> (přijímáme ho). Skončíme jinde → <b>nepatří</b> (odmítáme).</li>
+<li>Z aktuálního vrcholu nevede hrana s potřebným písmenem? Výpočet se zasekne a slovo odmítáme.</li>
+</ul>
+<p style="margin:0">Hrany dohromady tvoří <b>přechodovou funkci</b>: z každého vrcholu vede pro každé písmeno nejvýše jedna hrana (proto „deterministický“). Množině všech slov, která automat přijímá, se říká <b>jazyk automatu</b>.</p>
+</div>
+
+<h2>Příklad</h2>
+<div class="tabs">
+  <button id="t0" type="button">1) Konečný jazyk (4 slova)</button>
+  <button id="t1" type="button">2) Nekonečný jazyk (smyčky): obsahuje abb</button>
+</div>
+<div class="box">
+  <div class="scroll"><svg id="g" viewBox="0 0 640 260" role="img" aria-label="Graf automatu"></svg></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="ctl">
+    <input id="inp" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Slovo" placeholder="slovo">
+    <button id="load" type="button">Načíst slovo</button>
+    <button id="rnd" type="button">🎲 Náhodné slovo</button>
+    <button id="step" type="button">Krok →</button>
+    <button id="play" type="button">▶ Spustit</button>
+    <button id="reset" type="button">↺ Znovu</button>
+  </div>
+  <p class="muted" id="hint" style="margin:0"></p>
+</div>
+
+<h2>Úkoly</h2>
+<p>Nakreslete orientovaný graf (vrcholy a hrany) pro tyto jazyky (abeceda {a, b}, pokud není uvedeno jinak). Poté je ověřte na několika slovech.</p>
+<ol>
+<li>Jen slovo <code>aab</code> (nic jiného).</li>
+<li>Právě slova <code>ab</code>, <code>aa</code> a <code>b</code>.</li>
+<li>Všechna slova, která končí na <code>b</code>.</li>
+<li>Všechna slova, která mají aspoň 5 písmen (abeceda {a, b, c}).</li>
+<li>Slova, ve kterých je počet písmen <code>a</code> dělitelný třemi (0, 3, 6 …).</li>
+<li>Slova, která obsahují <code>ab</code> kdekoli uvnitř.</li>
+<li>Těžší: slova, která <b>neobsahují</b> <code>ab</code>. Zkuste začít automatem z úkolu 6.</li>
+</ol>
+
+<footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+</main>
+
+<script>
+(function(){
+var NS="http://www.w3.org/2000/svg",R=24;
+var AUT=[
+ {n:["q0","q1","q2","q3","q4","q5","q6"],x:[50,170,170,300,420,420,560],y:[130,55,205,130,55,205,130],start:0,fin:[6],
+  e:[[0,1,"a",0],[0,2,"b",0],[1,3,"b",0],[2,3,"a",0],[3,4,"a",0],[3,5,"b",0],[4,6,"b",0],[5,6,"a",0]],
+  hint:"Jazyk má jen 4 slova. Přijato: abab, abba, baab, baba. Odmítnuto: abaa, ab, aabb, prázdné slovo (nechte pole prázdné)."},
+ {n:["q0","q1","q2","q3"],x:[80,230,380,530],y:[150,150,150,150],start:0,fin:[3],
+  e:[[0,0,"b","L"],[0,1,"a",0],[1,1,"a","L"],[1,2,"b",-30],[2,1,"a",-30],[2,3,"b",0],[3,3,"a,b","L"]],
+  hint:"Jazyk obsahuje nekonečně mnoho slov. Přijato: abb, aabbb, babb, bbabbab. Odmítnuto: ab, abab, bba, prázdné slovo."}
+];
+var g=document.getElementById("g"),wordEl=document.getElementById("word"),msg=document.getElementById("msg"),
+inp=document.getElementById("inp"),cur=0,A,nodes,edges,delta,word="",pos=0,st=0,stuck=false,timer=null,from=null;
+function mk(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function build(){
+ A=AUT[cur];g.innerHTML="";
+ var d=mk("defs",{},g),m=mk("marker",{id:"ar",viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:7,markerHeight:7,orient:"auto-start-reverse"},d);
+ mk("path",{d:"M0 0L10 5L0 10z",fill:"context-stroke"},m);
+ edges=[];delta={};
+ A.e.forEach(function(e,i){
+  var a=[A.x[e[0]],A.y[e[0]]],b=[A.x[e[1]],A.y[e[1]]],p,lx,ly;
+  if(e[3]==="L"){var x=a[0],y=a[1];
+   p=mk("path",{d:"M"+(x-13)+" "+(y-R+4)+"C"+(x-45)+" "+(y-80)+" "+(x+45)+" "+(y-80)+" "+(x+13)+" "+(y-R+4),class:"ed","marker-end":"url(#ar)"},g);lx=x;ly=y-86}
+  else{var dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,bd=e[3],
+   c=[(a[0]+b[0])/2+nx*bd*2,(a[1]+b[1])/2+ny*bd*2];
+   function sh(q){var u=Math.hypot(c[0]-q[0],c[1]-q[1]);return[q[0]+(c[0]-q[0])/u*R,q[1]+(c[1]-q[1])/u*R]}
+   var s=sh(a),t=sh(b);
+   p=mk("path",{d:"M"+s+"Q"+c+" "+t,class:"ed","marker-end":"url(#ar)"},g);
+   lx=.25*s[0]+.5*c[0]+.25*t[0]+nx*(bd?Math.sign(bd):1)*14;ly=.25*s[1]+.5*c[1]+.25*t[1]+ny*(bd?Math.sign(bd):1)*14;}
+  var tx=mk("text",{x:lx,y:ly,class:"el"},g);tx.textContent=e[2];
+  edges.push(p);e[2].split(",").forEach(function(l){delta[e[0]+l]=[e[1],i]});
+ });
+ var sx=A.x[A.start],sy=A.y[A.start];
+ mk("path",{d:"M"+(sx-R-38)+" "+sy+"L"+(sx-R-2)+" "+sy,class:"ed","marker-end":"url(#ar)"},g);
+ nodes=A.n.map(function(n,i){
+  if(A.fin.indexOf(i)>=0)mk("circle",{cx:A.x[i],cy:A.y[i],r:R+5,class:"nd",style:"fill:none"},g);
+  var c=mk("circle",{cx:A.x[i],cy:A.y[i],r:R,class:"nd"},g);
+  var t=mk("text",{x:A.x[i],y:A.y[i],class:"lbl"},g);t.textContent=n;return c});
+ document.getElementById("hint").textContent=A.hint;
+ document.getElementById("t0").className=cur==0?"on":"";document.getElementById("t1").className=cur==1?"on":"";
+ load("");inp.value="";
+}
+function paint(){
+ nodes.forEach(function(c,i){c.setAttribute("class","nd"+(i==st&&!stuck?" act":"")+(i==st&&stuck?" bad":""))});
+ edges.forEach(function(e,i){e.setAttribute("class","ed"+(i===from?" act":""))});
+ var h="";
+ for(var i=0;i<word.length;i++)h+='<span class="'+(i<pos?"r":i==pos&&!stuck?"c":"")+'">'+word[i]+'</span>';
+ wordEl.innerHTML=h||'<span class="muted" style="font:14px sans-serif;letter-spacing:0">(prázdné slovo)</span>';
+ if(stuck){msg.className="msg no";msg.textContent="Z vrcholu "+A.n[st]+" nevede hrana pro písmeno „"+word[pos]+"“ → výpočet se zasekl, slovo odmítáme."}
+ else if(pos==word.length){var ok=A.fin.indexOf(st)>=0;msg.className="msg "+(ok?"ok":"no");
+  msg.textContent=ok?"Slovo je přečtené a nacházíme se v koncovém vrcholu → PŘIJATO ✓":"Slovo je přečtené, ale nenacházíme se v koncovém vrcholu → ODMÍTNUTO ✗"}
+ else{msg.className="msg";msg.textContent="Nacházíme se ve vrcholu "+A.n[st]+". Další písmeno: „"+word[pos]+"“."}
+}
+function load(w){stop();word=w;pos=0;st=A.start;stuck=false;from=null;paint()}
+function done(){return stuck||pos>=word.length}
+function step(){
+ if(done())return false;
+ var d=delta[st+word[pos]];
+ if(!d){stuck=true;from=null}else{st=d[0];from=d[1];pos++}
+ paint();return !done();
+}
+function stop(){if(timer){clearInterval(timer);timer=null}document.getElementById("play").textContent="▶ Spustit"}
+function ok(w){return /^[ab]*$/.test(w)}
+document.getElementById("load").onclick=function(){var w=inp.value.trim();if(!ok(w)){msg.className="msg no";msg.textContent="Použijte jen písmena a a b.";return}load(w)};
+inp.onkeydown=function(e){if(e.key==="Enter")document.getElementById("load").onclick()};
+function acc(w){var q=A.start;for(var i=0;i<w.length;i++){var d=delta[q+w[i]];if(!d)return false;q=d[0]}return A.fin.indexOf(q)>=0}
+document.getElementById("rnd").onclick=function(){
+ var all=[""],i=0,y=[],n=[];
+ while(i<all.length){var w=all[i++];(acc(w)?y:n).push(w);if(w.length<7){all.push(w+"a");all.push(w+"b")}}
+ var l=(Math.random()<.5&&y.length)?y:n;
+ var w=l[Math.floor(Math.random()*l.length)];
+ inp.value=w;load(w)};
+document.getElementById("step").onclick=function(){stop();step()};
+document.getElementById("reset").onclick=function(){load(word)};
+document.getElementById("play").onclick=function(){
+ if(timer){stop();return}
+ if(done())load(word);
+ if(done())return;
+ document.getElementById("play").textContent="⏸ Pauza";
+ timer=setInterval(function(){if(!step())stop()},900);
+};
+document.getElementById("t0").onclick=function(){cur=0;build()};
+document.getElementById("t1").onclick=function(){cur=1;build()};
+build();inp.value="abab";document.getElementById("load").onclick();
+
+var btn=document.getElementById("theme"),root=document.documentElement;
+function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function pt(){btn.textContent=th()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=th()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}pt()};
+pt();
+})();
+</script>
+</body>
+</html>
