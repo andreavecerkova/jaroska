@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Python: rekurze – Jaroška</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
+h1{font-size:30px;font-weight:500;margin:0}
+h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+a{color:var(--acc)}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.task{border-left:4px solid var(--acc);margin:12px 0}
+.task b{color:var(--acc);display:block}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;border-radius:8px;background:#fff}
+.demo{display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center}
+.base{fill:var(--bg);stroke:var(--line);stroke-width:3}
+.knob{fill:var(--acc)}
+.cross{stroke:var(--line);stroke-width:2}
+.led{display:grid;grid-template-columns:repeat(5,28px);gap:5px;background:#10161D;padding:10px;border-radius:10px}
+.led i{width:28px;height:28px;border-radius:4px;background:#2A1A1A}
+.led i.on{background:#FF3B30;box-shadow:0 0 8px #FF3B30}
+.val{font:500 18px monospace;min-width:150px}
+.demo>div:not(.led){width:230px;flex:none}
+#p3m{min-height:3.4em;line-height:1.4}
+.muted{color:var(--muted);font-size:14px}
+footer{color:var(--muted);font-size:13px;margin-top:40px}
+pre{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+.lvl{color:var(--new);font-size:15px;margin-left:8px;white-space:nowrap}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+a.dl{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 14px;text-decoration:none;color:var(--ink);white-space:nowrap}
+a.dl:hover{border-color:var(--acc)}
+h3{font-size:18px;font-weight:500;margin:28px 0 4px}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+  <h1>Python: rekurze</h1>
+  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+</div>
+<p><a href="navic.html">← zpět na Další materiály</a></p>
+
+<h2>Co je rekurze?</h2>
+<p>Rekurze znamená, že funkce volá sama sebe, ale vždy na <b>menší (jednodušší) úlohu</b>. Každá rekurzivní funkce potřebuje dvě věci:</p>
+<ul>
+<li><b>základní případ</b> (zarážku): úlohu tak malou, že ji vyřešíme přímo, bez dalšího volání,</li>
+<li><b>rekurzivní krok</b>: převedení úlohy na menší úlohu stejného druhu.</li>
+</ul>
+<p>Příklad: <code>n!</code> je <code>n</code> krát <code>(n−1)!</code>, a <code>0!</code> je rovno 1.</p>
+<pre><code>def factorial(n):
+    if n == 0:                    # základní případ: vyřešíme přímo
+        return 1
+    return n * factorial(n - 1)   # rekurzivní krok: menší úloha</code></pre>
+
+<h2>Jak úlohy řešit</h2>
+<ol>
+<li>Stáhněte si soubor s úlohou (nebo zkopírujte kód do svého editoru).</li>
+<li>Místo <code>pass</code> napište funkci tak, aby fungovala podle zadání v komentáři.</li>
+<li>Spusťte soubor. Pokud se <b>nevypíše nic</b>, všechny testy prošly. Pokud uvidíte <code>AssertionError</code>, některý test selhal. Řádek u chyby ukazuje který.</li>
+</ol>
+<p>Tip: k řešení použijte rekurzi. Hvězdičky u úloh značí obtížnost.</p>
+<div class="row"><a class="dl" href="rekurze/rekurze_ulohy.zip" download>⬇ Stáhnout všechny úlohy (.zip)</a></div>
+
+<h2>Úlohy</h2>
+<h3>Úloha 1: Cifry v posloupnosti<span class="lvl" title="obtížnost">★☆☆</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol1_cifry.py" download>⬇ Stáhnout ukol1_cifry.py</a><button type="button" class="cp" data-i="0">Kopírovat kód</button></div>
+<pre><code id="c0"># Napište funkci ‹count_digit_in_sequence›, která spočte kolikrát se
+# cifra ‹digit› vyskytuje v číslech v rozmezí od čísla ‹low› po
+# číslo ‹high› včetně. Například cifra 1 se na intervalu od 0 po 13
+# vyskytuje šestkrát, konkrétně v číslech: 1 10 11 12 13.
+
+def count_digit_in_sequence(digit, low, high):
+    pass
+
+
+def main():
+    assert count_digit_in_sequence(1, 0, 13) == 6
+    assert count_digit_in_sequence(0, 10, 20) == 2
+    assert count_digit_in_sequence(0, 0, 10) == 2
+    assert count_digit_in_sequence(4, 15, 23) == 0
+    assert count_digit_in_sequence(5, 20, 120) == 20
+    assert count_digit_in_sequence(0, 10, 100) == 11
+    assert count_digit_in_sequence(2, 111, 1000) == 279
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3>Úloha 2: Hanojské věže<span class="lvl" title="obtížnost">★★☆</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol2_hanoj.py" download>⬇ Stáhnout ukol2_hanoj.py</a><button type="button" class="cp" data-i="1">Kopírovat kód</button></div>
+<pre><code id="c1"># Hanojské věže: na tyči ‹source› leží ‹n› disků (nahoře nejmenší).
+# Disky je třeba přemístit na tyč ‹target›, přičemž smíte přesouvat
+# vždy jen jeden disk a nikdy nesmíte položit větší disk na menší.
+# K dispozici je ještě pomocná tyč ‹spare›.
+#
+# Napište funkci ‹hanoi›, která vrátí seznam tahů (dvojic
+# ‹(odkud, kam)›) v pořadí, v jakém je máte provést, a to
+# s nejmenším možným počtem tahů. Pro ‹n› = 0 vrátí prázdný seznam.
+
+def hanoi(n, source, target, spare):
+    pass
+
+
+def main():
+    assert hanoi(0, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;) == []
+    assert hanoi(1, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;) == [(&quot;A&quot;, &quot;C&quot;)]
+    assert hanoi(2, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;) == [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;B&quot;, &quot;C&quot;)]
+    assert hanoi(3, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;) == [
+        (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;B&quot;), (&quot;C&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;),
+        (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;C&quot;),
+    ]
+    assert hanoi(2, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;) == [(&quot;X&quot;, &quot;Z&quot;), (&quot;X&quot;, &quot;Y&quot;), (&quot;Z&quot;, &quot;Y&quot;)]
+    assert len(hanoi(10, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;)) == 1023
+    assert len(hanoi(16, &quot;A&quot;, &quot;C&quot;, &quot;B&quot;)) == 65535
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3>Úloha 3: Cesty v mřížce<span class="lvl" title="obtížnost">★★☆</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol3_cesty.py" download>⬇ Stáhnout ukol3_cesty.py</a><button type="button" class="cp" data-i="2">Kopírovat kód</button></div>
+<pre><code id="c2"># Máme mřížku s ‹rows› řádky a ‹cols› sloupci. Začínáme v levém horním
+# rohu (políčko ‹(0, 0)›) a chceme se dostat do pravého dolního rohu
+# (políčko ‹(rows - 1, cols - 1)›). Z každého políčka se smíme posunout
+# buď o jedno políčko doprava, nebo o jedno políčko dolů.
+#
+# Některá políčka jsou zablokovaná: množina ‹blocked› obsahuje jejich
+# souřadnice ‹(řádek, sloupec)›. Na zablokované políčko nesmíme vstoupit.
+#
+# Napište funkci ‹count_paths›, která spočte, kolika různými cestami
+# se z levého horního rohu do pravého dolního dostaneme.
+#
+# Pozor: poslední dva testy jsou záludné. Zvládne váš program i velkou
+# mřížku v rozumném čase?
+
+def count_paths(rows, cols, blocked):
+    pass
+
+
+def main():
+    assert count_paths(1, 1, set()) == 1
+    assert count_paths(2, 2, set()) == 2
+    assert count_paths(3, 3, set()) == 6
+    assert count_paths(3, 3, {(1, 1)}) == 2
+    assert count_paths(3, 3, {(0, 1), (1, 0)}) == 0
+    assert count_paths(3, 4, {(1, 2)}) == 4
+    assert count_paths(10, 10, set()) == 48620
+    assert count_paths(18, 18, set()) == 2333606220
+    assert count_paths(18, 18, {(9, 9)}) == 1707866820
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3>Úloha 4: Řetězce bez dvou jedniček<span class="lvl" title="obtížnost">★★☆</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol4_retezce.py" download>⬇ Stáhnout ukol4_retezce.py</a><button type="button" class="cp" data-i="3">Kopírovat kód</button></div>
+<pre><code id="c3"># Napište funkci ‹no_two_ones›, která vrátí seznam všech řetězců
+# délky ‹n› složených ze znaků ‹&quot;0&quot;› a ‹&quot;1&quot;›, v nichž nejsou dvě
+# jedničky bezprostředně za sebou (tedy žádný řetězec neobsahuje
+# podřetězec ‹&quot;11&quot;›). Řetězce vraťte seřazené abecedně.
+# Pro ‹n› = 0 existuje jediný řetězec: prázdný.
+
+def no_two_ones(n):
+    pass
+
+
+def main():
+    assert no_two_ones(0) == [&quot;&quot;]
+    assert no_two_ones(1) == [&quot;0&quot;, &quot;1&quot;]
+    assert no_two_ones(2) == [&quot;00&quot;, &quot;01&quot;, &quot;10&quot;]
+    assert no_two_ones(3) == [&quot;000&quot;, &quot;001&quot;, &quot;010&quot;, &quot;100&quot;, &quot;101&quot;]
+    assert len(no_two_ones(10)) == 144
+    assert len(no_two_ones(15)) == 1597
+    assert no_two_ones(15)[-1] == &quot;101010101010101&quot;
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3>Úloha 5: Součet podmnožiny<span class="lvl" title="obtížnost">★★★</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol5_podmnoziny.py" download>⬇ Stáhnout ukol5_podmnoziny.py</a><button type="button" class="cp" data-i="4">Kopírovat kód</button></div>
+<pre><code id="c4"># Napište funkci ‹subset_sum›, která zjistí, zda z čísel v seznamu
+# ‹numbers› (kladná celá čísla) lze vybrat některá (každé číslo
+# nejvýše jednou) tak, aby jejich součet byl přesně ‹target›.
+# Prázdný výběr má součet 0.
+#
+# Funkce vrátí ‹True›, nebo ‹False›. Původní seznam nesmíte měnit.
+
+def subset_sum(numbers, target):
+    pass
+
+
+def main():
+    assert subset_sum([], 0) is True
+    assert subset_sum([], 5) is False
+    assert subset_sum([5], 5) is True
+    assert subset_sum([5], 3) is False
+    assert subset_sum([3, 34, 4, 12, 5, 2], 9) is True
+    assert subset_sum([3, 34, 4, 12, 5, 2], 30) is False
+    assert subset_sum([2, 4, 6, 8], 15) is False
+    assert subset_sum([7, 11, 13, 17, 19], 50) is True
+    assert subset_sum([7, 11, 13, 17, 19], 67) is True
+    assert subset_sum([7, 11, 13, 17, 19], 68) is False
+    nums = [1, 2, 3]
+    subset_sum(nums, 4)
+    assert nums == [1, 2, 3]
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h3>Úloha 6: Rozklady čísla na součet<span class="lvl" title="obtížnost">★★★</span></h3>
+<div class="row"><a class="dl" href="rekurze/ukol6_rozklady.py" download>⬇ Stáhnout ukol6_rozklady.py</a><button type="button" class="cp" data-i="5">Kopírovat kód</button></div>
+<pre><code id="c5"># Napište funkci ‹partitions›, která spočte, kolika způsoby lze
+# kladné číslo ‹n› zapsat jako součet kladných celých čísel, přičemž
+# na pořadí sčítanců nezáleží. Například číslo 4 lze zapsat pěti
+# způsoby: 4, 3+1, 2+2, 2+1+1, 1+1+1+1 (zápisy 3+1 a 1+3 se
+# považují za stejný). Pro ‹n› = 0 existuje jeden způsob: prázdný součet.
+
+def partitions(n):
+    pass
+
+
+def main():
+    assert partitions(0) == 1
+    assert partitions(1) == 1
+    assert partitions(2) == 2
+    assert partitions(4) == 5
+    assert partitions(5) == 7
+    assert partitions(10) == 42
+    assert partitions(30) == 5604
+    assert partitions(50) == 204226
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+
+<footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+</main>
+<script>
+(function(){
+document.querySelectorAll(".cp").forEach(function(b){b.onclick=function(){
+ var t=document.getElementById("c"+b.dataset.i).textContent,o=b.textContent;
+ function ok(){b.textContent="Zkopírováno ✓";setTimeout(function(){b.textContent=o},1500)}
+ try{navigator.clipboard.writeText(t).then(ok,function(){})}catch(e){}}});
+var btn=document.getElementById("theme"),root=document.documentElement;
+function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function pt(){btn.textContent=th()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=th()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}pt()};
+pt();
+})();
+</script>
+</body>
+</html>
