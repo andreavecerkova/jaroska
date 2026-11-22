@@ -9,29 +9,39 @@ if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-sche
 document.documentElement.setAttribute("data-theme",t)})();
 </script>
 <title>Piny II: Joystick – Jaroška</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F9;--card:#fff;--ink:#17202B;--muted:#5B6877;--line:#D5DBE3;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lmroman-bold.otf") format("opentype")}
+
+:root{--bg:#EEF3FB;--card:#fff;--btn:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+--shadow:0 10px 40px rgba(36,86,166,.14);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#10161D;--card:#18212B;--ink:#E8EDF3;--muted:#9AA7B6;--line:#2C3947;--acc:#7FB0F5;--new:#FF8A63;--ok:#5BD08F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
-main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
-.top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0 0 8px}
-h1{font-size:30px;font-weight:500;margin:0}
-h2{font-size:20px;font-weight:500;margin:32px 0 8px}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;min-height:100vh;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+/* hlavička jako rámeček */
+.frame{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 24px 20px;margin:0 0 8px;box-shadow:var(--shadow)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+.back{display:inline-block;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+h1{font-size:36px;line-height:1.25;font-weight:700;margin:0}
+h2{font-size:24px;font-weight:700;margin:32px 0 8px}
 a{color:var(--acc)}
-button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+button{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap}
+button:hover{border-color:var(--acc)}
 button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
 .task{border-left:4px solid var(--acc);margin:12px 0}
 .task b{color:var(--acc);display:block}
 table{border-collapse:collapse;width:100%}
 th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
 .scroll{overflow-x:auto}
-img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;border-radius:8px;background:#fff}
+img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;border-radius:12px;background:#fff}
 .demo{display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center}
 .base{fill:var(--bg);stroke:var(--line);stroke-width:3}
 .knob{fill:var(--acc)}
@@ -39,20 +49,25 @@ img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;bord
 .led{display:grid;grid-template-columns:repeat(5,28px);gap:5px;background:#10161D;padding:10px;border-radius:10px}
 .led i{width:28px;height:28px;border-radius:4px;background:#2A1A1A}
 .led i.on{background:#FF3B30;box-shadow:0 0 8px #FF3B30}
-.val{font:500 18px monospace;min-width:150px}
+.val{font:700 18px monospace;min-width:150px}
 .demo>div:not(.led){width:230px;flex:none}
 #p3m{min-height:3.4em;line-height:1.4}
-.muted{color:var(--muted);font-size:14px}
-footer{color:var(--muted);font-size:13px;margin-top:40px}
+.muted{color:var(--muted);font-size:16px}
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:30px}}
 </style>
 </head>
 <body>
 <main>
-<div class="top">
+<header class="frame">
+  <div class="top">
+    <a class="back" href="microbit_tercie.html">← Zpět na Micro:bit</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
   <h1>Piny II: Joystick</h1>
-  <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
-</div>
-<p><a href="microbit_tercie.html">← zpět na Micro:bit</a></p>
+</header>
 
 <h2>Potřebné součásti</h2>
 <ul>
@@ -117,7 +132,7 @@ footer{color:var(--muted);font-size:13px;margin-top:40px}
   <button id="pp2" type="button">Pauza</button>
 </div>
 
-<footer><a href="https://www.jaroska.cz" style="color:inherit">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
 </main>
 <script>
 (function(){
