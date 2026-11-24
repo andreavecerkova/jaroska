@@ -62,7 +62,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset
 section{margin:0 0 34px}
 h2{font-size:24px;font-weight:700;margin:0 0 8px}
 .hint{color:var(--muted);font-size:16px;margin:0 0 12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;align-items:start}
 .card{display:block;background:var(--glass);border:1px solid var(--glass-line);border-radius:18px;padding:16px 18px;color:inherit;text-decoration:none;
   box-shadow:0 4px 18px rgba(36,86,166,.10);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
@@ -73,6 +73,9 @@ a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
 .big{padding:24px 20px}
 .big b{font-size:26px;line-height:1.25}
 .empty{border-style:dashed;color:var(--muted);font-size:16px}
+
+/* obrázek v kartě – je pod textem, takže nikdy nezakrývá název */
+.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto}
 
 footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
@@ -98,7 +101,7 @@ footer a:hover{color:var(--acc)}
 
 <section id="temata">
   <div class="cards">
-    <div class="card big soon"><b>Micro:bit</b><span></span></div>
+    <div class="card big soon"><b>Micro:bit</b><span></span><img class="pic" src="microbit.png" alt="" width="617" height="382"></div>
     <!-- Nová karta: <a class="card big" href="odkaz.html"><b>Název</b><span>Popis</span></a> -->
     <div class="card big soon"><b>Webové stránky</b><span></span></div>
     <div class="card big soon"><b>Historie informatiky</b><span></span></div>
