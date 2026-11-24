@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Piny I: Regulace jasu (kvarta) – Jaroška</title>
+<style>
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("../../fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("../../fonts/lmroman-bold.otf") format("opentype")}
+
+:root{
+  --bg:#EEF3FB;--card:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;
+  --task:#1E8A5B;--warn:#C0392B;--orange:#D9822B;
+  --glass:rgba(255,255,255,.62);--glass-line:rgba(36,86,166,.22);--shadow:0 10px 40px rgba(36,86,166,.16);
+  --g1:rgba(61,123,255,.32);--g2:rgba(120,190,255,.38);--g3:rgba(36,86,166,.18);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --task:#6FD3A0;--warn:#FF8A7A;--orange:#FFB36B;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --task:#6FD3A0;--warn:#FF8A7A;--orange:#FFB36B;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif;
+  display:flex;flex-direction:column;min-height:100vh;
+  min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+/* modré „aurora“ pozadí – je pevné, takže se nehýbe při scrollování */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60vmax 45vmax at 8% 0%,var(--g1),transparent 60%),
+    radial-gradient(55vmax 40vmax at 100% 18%,var(--g2),transparent 60%),
+    radial-gradient(50vmax 40vmax at 40% 105%,var(--g3),transparent 60%)}
+
+main{flex:1;width:100%;max-width:860px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column}
+
+/* hlavička jako rámeček */
+.frame{background:var(--glass);border:1px solid var(--glass-line);border-radius:22px;
+  padding:20px 24px 22px;margin:0 0 30px;box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+h1{font-size:36px;line-height:1.25;font-weight:700;margin:0}
+.back{display:inline-block;margin:0;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+.sub{color:var(--muted);margin:6px 0 0;max-width:75ch}
+a{color:var(--acc)}
+
+button{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap;flex:none}
+button:hover{border-color:var(--acc)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+h2{font-size:24px;font-weight:700;margin:34px 0 8px}
+.box{background:var(--glass);border:1px solid var(--glass-line);border-radius:18px;padding:16px 20px;
+  box-shadow:0 4px 18px rgba(36,86,166,.10)}
+.box p{margin:0 0 10px}.box p:last-child{margin-bottom:0}
+ul{margin:6px 0;padding-left:24px}li{margin:4px 0}
+code{font:15px/1.4 ui-monospace,Consolas,Menlo,monospace;background:color-mix(in srgb,var(--acc) 12%,transparent);padding:1px 6px;border-radius:6px}
+pre{margin:10px 0;padding:12px 16px;border-radius:12px;overflow-x:auto;
+  background:color-mix(in srgb,var(--ink) 7%,var(--card));border:1px solid var(--line)}
+pre code{background:none;padding:0;font-size:15px;line-height:1.55}
+
+table{border-collapse:collapse;margin:8px auto;max-width:100%}
+.tw{overflow-x:auto}
+th,td{padding:5px 14px;text-align:left}
+th{border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);font-weight:700}
+tbody tr:last-child td{border-bottom:2px solid var(--ink)}
+tr.vr td{background:color-mix(in srgb,var(--acc) 16%,transparent)}
+tr.led td{background:color-mix(in srgb,var(--orange) 20%,transparent)}
+
+figure{margin:14px 0 4px;text-align:center}
+figure img{display:inline-block;width:100%;max-width:340px;height:auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
+figcaption{color:var(--muted);font-size:15px;margin-top:4px}
+
+.warn{border:2px solid var(--warn);border-radius:12px;padding:8px 16px;margin:14px 0;font-weight:700}
+
+.task{border:1px solid color-mix(in srgb,var(--task) 45%,transparent);border-left:6px solid var(--task);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--task) 12%,transparent),transparent 70%),var(--glass);
+  border-radius:16px;padding:14px 20px;margin:0 0 16px}
+.task h3{font-size:19px;margin:0 0 6px;color:var(--task)}
+.task p{margin:0 0 8px}
+details{margin:8px 0 0;color:var(--ink)}
+summary{cursor:pointer;color:var(--acc);font-weight:700}
+details[open]>summary{margin-bottom:6px}
+.hintbox{padding:2px 0 2px 14px;border-left:3px solid var(--line)}
+
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+
+:root[data-theme="dark"] .box,:root[data-theme="dark"] .task{box-shadow:none}
+:root[data-theme="dark"] .frame,:root[data-theme="dark"] .box{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:29px}}
+</style>
+</head>
+<body>
+<main>
+
+<header class="frame">
+  <div class="top">
+    <a class="back" href="../microbit_kvarta.html">← Zpět na Micro:bit (kvarta)</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
+  <h1>Piny I: Regulace jasu</h1>
+  <p class="sub">Programujeme v <a href="https://python.microbit.org/v/3" target="_blank" rel="noopener">micro:bit Python Editoru</a>. Potenciometrem budeme řídit jas 3W LED.</p>
+</header>
+
+<h2>Potřebné součásti</h2>
+<div class="box">
+<ul>
+<li>samozřejmě micro:bit</li>
+<li>rozšiřující deska</li>
+<li>modul potenciometru <i>(VR modul, otočný knoflík)</i></li>
+<li>modul 3W LED <i>(Keyestudio 3W LED Module)</i></li>
+<li>propojovací vodiče (drátky) ×6</li>
+</ul>
+</div>
+
+<h2>Fungování potenciometru a LED modulu</h2>
+<div class="box">
+<p><b>Potenciometr</b> (VR modul) je knoflík, který se dá otáčet. Micro:bit podle natočení přečte číslo od <b>0</b> do <b>1023</b>. Když je knoflík úplně vlevo, vyjde 0, když je úplně vpravo, vyjde 1023, a mezi tím se číslo plynule mění.</p>
+<p>Toto číslo chceme poslat <b>3W LED modulu</b>. Svítivost LED je podle hodnoty, kterou dostane: při 0 nesvítí, při 1023 svítí naplno a při hodnotách mezi tím svítí slaběji nebo silněji.</p>
+</div>
+
+<h2>Zapojení modulů k micro:bitu</h2>
+<div class="box">
+<p>Oba moduly mají tři vývody: <b>G</b> (zem), <b>V</b> (napájení) a <b>S</b> (signál). Drátky zapojte takto:</p>
+<div class="tw">
+<table>
+<thead><tr><th>Modul</th><th>Vývod</th><th>Barva vodiče (drátku)</th><th>Pin na desce</th></tr></thead>
+<tbody>
+<tr class="vr"><td>VR modul</td><td>G (zem)</td><td>šedý (na obrázku)</td><td>G</td></tr>
+<tr class="vr"><td>VR modul</td><td>V (napájení)</td><td>červený (na obrázku)</td><td>V</td></tr>
+<tr class="vr"><td>VR modul</td><td>S (signál)</td><td>zelený (na obrázku)</td><td>P0 (S)</td></tr>
+<tr class="led"><td>3W LED</td><td>G (zem)</td><td>šedý (třeba)</td><td>G</td></tr>
+<tr class="led"><td>3W LED</td><td>V (napájení)</td><td>červený (třeba)</td><td>V</td></tr>
+<tr class="led"><td>3W LED</td><td>S (signál)</td><td>žlutý (třeba)</td><td>P1 (S)</td></tr>
+</tbody>
+</table>
+</div>
+<figure>
+  <img src="led_potenciometr_zapojeni.png" alt="Zapojení potenciometru k rozšiřující desce micro:bitu" width="548" height="588">
+  <figcaption>Na obrázku je zapojený jen potenciometr, 3W LED připojíte stejným způsobem na P1.</figcaption>
+</figure>
+<div class="warn">Pozor: 3W LED svítí velmi silně. Nedívejte se do ní zblízka.</div>
+</div>
+
+<h2>Jak na to v Pythonu</h2>
+<div class="box">
+<p>Piny <b>P0, P1 a P2</b> umí pracovat v analogovém režimu. Hodnota není jen vypnuto/zapnuto (0 nebo 1), ale libovolné číslo od <b>0 do 1023</b>.</p>
+<p><b>Čtení</b> (vstup) vrací číslo podle napětí na pinu. Takhle ukážeme natočení potenciometru zapojeného na P0:</p>
+<pre><code>from microbit import *
+
+while True:
+    display.scroll(pin0.read_analog())</code></pre>
+<p><b>Zápis</b> (výstup) naopak nastaví „sílu“ signálu na pinu. Hodnota 0 znamená vypnuto, 1023 naplno a mezi tím se LED rozsvítí částečně:</p>
+<pre><code>pin1.write_analog(500)</code></pre>
+<p>Pauzu v programu uděláte příkazem <code>sleep(ms)</code>, například <code>sleep(1000)</code> počká jednu sekundu.</p>
+<p style="color:var(--muted);font-size:16px">Nic, co má napětí vyšší než 3 V, nikdy nepřipojujte přímo na piny, mohli byste micro:bit poškodit.</p>
+</div>
+
+<h2>Úlohy</h2>
+
+<div class="task">
+<h3>1.1 Úloha 1: Stmívač</h3>
+<p>Připojte 3W LED. Naprogramujte micro:bit tak, aby se jas LED řídil natočením knoflíku: čím víc otočíte doprava, tím víc LED svítí. Hodnotu, kterou přečtete z potenciometru, předejte přímo LED.</p>
+<details>
+<summary>Nápověda</summary>
+<div class="hintbox">
+<p>Program se v nekonečné smyčce pořád dokola opakuje: přečte hodnotu z P0, uloží ji do proměnné a stejnou hodnotu pošle na P1.</p>
+<pre><code>from microbit import *
+
+while True:
+    hodnota = ...        # přečti pin0
+    ...                  # pošli hodnotu na pin1</code></pre>
+<p>Pokud si nejste jistí, jestli čtete správně, nejdřív hodnotu vypište na displej pomocí <code>display.scroll(hodnota)</code>.</p>
+</div>
+</details>
+</div>
+
+<div class="task">
+<h3>1.2 Úloha 2: Noční lampa</h3>
+<p>Upravte program tak, aby LED při malých hodnotách (například pod 100) úplně zhasla a nad touto hranicí se plynule rozsvěcela. Zkuste najít takovou hranici, aby se knoflík při zhasnutí příjemně ovládal.</p>
+<details>
+<summary>Nápověda 1: zhasnutí</summary>
+<div class="hintbox">
+<p>Použijte podmínku <code>if</code> / <code>else</code>. Pokud je hodnota menší než hranice, pošlete LED 0. Jinak pošlete hodnotu, kterou jste přečetli.</p>
+<pre><code>if hodnota &lt; 100:
+    ...
+else:
+    ...</code></pre>
+</div>
+</details>
+<details>
+<summary>Nápověda 2: plynulý rozjezd</summary>
+<div class="hintbox">
+<p>Když pošlete rovnou původní hodnotu, LED se těsně nad hranicí rozsvítí skokem na 100. Aby začínala od nuly, odečtěte hranici a výsledek přepočítejte, aby v nejvyšší poloze (1023) vyšlo zase 1023:</p>
+<pre><code>nova = (hodnota - 100) * 1023 // 923</code></pre>
+<p>Dělení <code>//</code> dává celé číslo, což <code>write_analog</code> potřebuje. Zkuste hranici posouvat a hledat, která se vám ovládá nejlépe.</p>
+</div>
+</details>
+</div>
+
+<div class="task">
+<h3>1.3 Úloha 3: Blikání</h3>
+<p>Změňte program tak, aby knoflík neovládal jas, ale <b>rychlost blikání</b> LED. Vlevo bliká pomalu, vpravo rychle. Pauza mezi bliknutími by se měla pohybovat od 50 do 1000 milisekund.</p>
+<details>
+<summary>Nápověda 1: blikání</summary>
+<div class="hintbox">
+<p>LED teď nepotřebuje žádné mezistupně jasu, jen zapnout a vypnout. Mezi tím je pauza, jejíž délku určuje potenciometr:</p>
+<pre><code>pin1.write_analog(1023)
+sleep(pauza)
+pin1.write_analog(0)
+sleep(pauza)</code></pre>
+</div>
+</details>
+<details>
+<summary>Nápověda 2: výpočet pauzy</summary>
+<div class="hintbox">
+<p>Vlevo (hodnota 0) má být pauza nejdelší, tedy 1000 ms, a vpravo (hodnota 1023) nejkratší, tedy 50 ms. Hodnotu z potenciometru tedy musíte přepočítat z intervalu 0 až 1023 na interval 1000 až 50. Pozor, je to obráceně: čím větší hodnota, tím menší pauza.</p>
+<pre><code>pauza = 1000 - hodnota * 950 // 1023</code></pre>
+<p>Zkuste si dosadit krajní hodnoty 0 a 1023 a ověřit, že vyjde 1000 a 50.</p>
+</div>
+</details>
+</div>
+
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková · <span id="upd"></span></footer>
+</main>
+
+<script>
+(function(){
+var btn=document.getElementById("theme"),root=document.documentElement;
+function cur(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function paint(){btn.textContent=cur()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=cur()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}paint()};
+paint();
+var u=document.getElementById("upd");
+if(u)u.textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
