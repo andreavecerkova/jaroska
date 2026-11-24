@@ -169,6 +169,8 @@ function cur(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
 function paint(){btn.textContent=cur()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
 btn.onclick=function(){var t=cur()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}paint()};
 paint();
+var u=document.getElementById("upd"),d=new Date(document.lastModified);
+if(u&&!isNaN(d))u.textContent="Poslední úprava: "+d.toLocaleDateString("cs-CZ");
 })();
 </script>
 </body>
