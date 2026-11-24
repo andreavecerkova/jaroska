@@ -132,7 +132,7 @@ footer a:hover{color:var(--acc)}
   <button id="pp2" type="button">Pauza</button>
 </div>
 
-<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková · <span id="upd"></span></footer>
 </main>
 <script>
 (function(){
@@ -186,6 +186,8 @@ function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
 function pt(){btn.textContent=th()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
 btn.onclick=function(){var t=th()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}pt()};
 pt();
+var u=document.getElementById("upd");
+if(u)u.textContent=new Date().getFullYear();
 })();
 </script>
 </body>
