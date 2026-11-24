@@ -201,7 +201,7 @@ while True:
   <div class="vals"><div class="val" id="m0p">pin1.write_analog(0)</div></div>
 </div>
 <p class="cap">Program je v nekonečné smyčce <code>while True</code>, takže se pořád opakuje.</p>
-<button id="m0b" type="button">⏸ Pauza</button>
+<button id="m0b" type="button"> Pauza</button>
 </div>
 
 <div class="task">
@@ -219,7 +219,7 @@ while True:
   <div class="vals"><div class="val" id="a1v">hodnota = 0</div><div class="val" id="a1p" style="color:var(--muted)">LED nesvítí</div></div>
 </div>
 <p class="cap">Knoflík se sám otáčí zleva doprava a zpátky. Čím větší hodnota, tím víc LED svítí.</p>
-<button id="a1b" type="button">⏸ Pauza</button>
+<button id="a1b" type="button">Pauza</button>
 <details>
 <summary>Nápověda</summary>
 <div class="hintbox">
@@ -236,26 +236,18 @@ while True:
 
 <div class="task">
 <h3>1.2 Úloha 2: Noční lampa</h3>
-<p>Upravte program tak, aby LED při malých hodnotách (například pod 100) úplně zhasla a nad touto hranicí se plynule rozsvěcela. Zkuste najít takovou hranici, aby se knoflík při zhasnutí příjemně ovládal.</p>
+<p>Upravte program tak, aby LED při malých hodnotách (například pod 100) úplně zhasla a nad touto hranicí se rozsvěcela. Zkuste najít takovou hranici, aby se knoflík při zhasnutí příjemně ovládal.</p>
 <details>
 <summary>Nápověda 1: zhasnutí</summary>
 <div class="hintbox">
-<p>Použijte podmínku <code>if</code> / <code>else</code>. Pokud je hodnota menší než hranice, pošlete LED 0. Jinak pošlete hodnotu, kterou jste přečetli.</p>
-<pre><code>if hodnota &lt; 100:
+<p>Použijte podmínku <code>if</code> / <code>else</code>. Pokud je hodnota menší než hranice, pošlete LED hodnotu 0. Jinak pošlete hodnotu, kterou jste přečetli.</p>
+<pre><code>if hodnota &lt; 230:
     ...
 else:
     ...</code></pre>
 </div>
 </details>
-<details>
-<summary>Nápověda 2: plynulý rozjezd</summary>
-<div class="hintbox">
-<p>Když pošlete rovnou původní hodnotu, LED se těsně nad hranicí rozsvítí skokem na 100. Aby začínala od nuly, odečtěte hranici a výsledek přepočítejte, aby v nejvyšší poloze (1023) vyšlo zase 1023:</p>
-<pre><code>nova = (hodnota - 100) * 1023 // 923</code></pre>
-<p>Dělení <code>//</code> dává celé číslo, což <code>write_analog</code> potřebuje. Zkuste hranici posouvat a hledat, která se vám ovládá nejlépe.</p>
-</div>
-</details>
-</div>
+
 
 <div class="task">
 <h3>1.3 Úloha 3: Blikání</h3>
@@ -272,7 +264,7 @@ else:
   <div class="vals"><div class="val" id="a3v">hodnota = 0</div><div class="val" id="a3p" style="color:var(--muted)">pauza = 1000 ms</div></div>
 </div>
 <p class="cap">Čím víc je knoflík vpravo, tím kratší je pauza a LED bliká rychleji.</p>
-<button id="a3b" type="button">⏸ Pauza</button>
+<button id="a3b" type="button">Pauza</button>
 <details>
 <summary>Nápověda 1: blikání</summary>
 <div class="hintbox">
