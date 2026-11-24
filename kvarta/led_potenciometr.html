@@ -85,15 +85,27 @@ figcaption{color:var(--muted);font-size:15px;margin-top:4px}
 
 .warn{border:2px solid var(--warn);border-radius:12px;padding:8px 16px;margin:14px 0;font-weight:700}
 
-.task{border:1px solid color-mix(in srgb,var(--task) 45%,transparent);border-left:6px solid var(--task);
-  background:linear-gradient(135deg,color-mix(in srgb,var(--task) 12%,transparent),transparent 70%),var(--glass);
-  border-radius:16px;padding:14px 20px;margin:0 0 16px}
-.task h3{font-size:19px;margin:0 0 6px;color:var(--task)}
+.task{border:1px solid var(--glass-line);border-left:4px solid var(--acc);
+  background:var(--glass);border-radius:16px;padding:14px 20px;margin:0 0 16px}
+.task h3{font-size:19px;margin:0 0 6px;color:var(--acc)}
 .task p{margin:0 0 8px}
 details{margin:8px 0 0;color:var(--ink)}
 summary{cursor:pointer;color:var(--acc);font-weight:700}
 details[open]>summary{margin-bottom:6px}
 .hintbox{padding:2px 0 2px 14px;border-left:3px solid var(--line)}
+
+/* animace */
+.demo{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;margin:10px 0 4px;
+  padding:12px;border:1px dashed var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 55%,transparent)}
+.demo svg{flex:none}
+.demo .vals{flex:none;width:260px;max-width:100%}
+.val{font:700 17px/1.5 ui-monospace,Consolas,Menlo,monospace;height:1.5em;white-space:nowrap;overflow:hidden}
+.dial-bg{fill:var(--card);stroke:var(--line);stroke-width:3}
+.dial-ptr{stroke:var(--acc);stroke-width:6;stroke-linecap:round}
+.dial-t{fill:var(--muted);font:13px ui-monospace,Consolas,monospace}
+.led-core{fill:#FFD34D;stroke:var(--ink);stroke-width:2}
+.led-halo{fill:#FFC933}
+.cap{color:var(--muted);font-size:15px;margin:6px 0 8px}
 
 footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
@@ -173,8 +185,41 @@ while True:
 <h2>Úlohy</h2>
 
 <div class="task">
+<h3>Motivační úloha: Rozsvítit a zhasnout (vyřešená)</h3>
+<p>Nejdřív si vyzkoušíme, že LED opravdu umíme ovládat. Zatím bez potenciometru: LED se na vteřinu rozsvítí, na vteřinu zhasne a tak pořád dokola. Program si opište, nahrajte do micro:bitu a zkuste změnit délku pauz.</p>
+<pre><code>from microbit import *
+
+while True:
+    pin1.write_analog(1023)   # LED svítí naplno
+    sleep(1000)               # čekej 1 sekundu
+    pin1.write_analog(0)      # LED zhasne
+    sleep(1000)               # čekej 1 sekundu</code></pre>
+<div class="demo">
+  <svg width="110" height="110" viewBox="0 0 100 100" role="img" aria-label="Animace blikající LED">
+    <circle id="m0h" class="led-halo" cx="50" cy="50" r="46" opacity="0"/><circle id="m0c" class="led-core" cx="50" cy="50" r="22" fill-opacity=".15"/>
+  </svg>
+  <div class="vals"><div class="val" id="m0p">pin1.write_analog(0)</div></div>
+</div>
+<p class="cap">Program je v nekonečné smyčce <code>while True</code>, takže se pořád opakuje.</p>
+<button id="m0b" type="button">⏸ Pauza</button>
+</div>
+
+<div class="task">
 <h3>1.1 Úloha 1: Stmívač</h3>
 <p>Připojte 3W LED. Naprogramujte micro:bit tak, aby se jas LED řídil natočením knoflíku: čím víc otočíte doprava, tím víc LED svítí. Hodnotu, kterou přečtete z potenciometru, předejte přímo LED.</p>
+<div class="demo">
+  <svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Animace otáčení potenciometru">
+    <circle class="dial-bg" cx="70" cy="70" r="54"/>
+    <line id="a1d" class="dial-ptr" x1="70" y1="70" x2="70" y2="28"/>
+    <text class="dial-t" x="14" y="132">0</text><text class="dial-t" x="96" y="132">1023</text>
+  </svg>
+  <svg width="110" height="110" viewBox="0 0 100 100" role="img" aria-label="Animace jasu LED">
+    <circle id="a1h" class="led-halo" cx="50" cy="50" r="46" opacity="0"/><circle id="a1c" class="led-core" cx="50" cy="50" r="22" fill-opacity=".15"/>
+  </svg>
+  <div class="vals"><div class="val" id="a1v">hodnota = 0</div><div class="val" id="a1p" style="color:var(--muted)">LED nesvítí</div></div>
+</div>
+<p class="cap">Knoflík se sám otáčí zleva doprava a zpátky. Čím větší hodnota, tím víc LED svítí.</p>
+<button id="a1b" type="button">⏸ Pauza</button>
 <details>
 <summary>Nápověda</summary>
 <div class="hintbox">
@@ -215,6 +260,19 @@ else:
 <div class="task">
 <h3>1.3 Úloha 3: Blikání</h3>
 <p>Změňte program tak, aby knoflík neovládal jas, ale <b>rychlost blikání</b> LED. Vlevo bliká pomalu, vpravo rychle. Pauza mezi bliknutími by se měla pohybovat od 50 do 1000 milisekund.</p>
+<div class="demo">
+  <svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Animace otáčení potenciometru">
+    <circle class="dial-bg" cx="70" cy="70" r="54"/>
+    <line id="a3d" class="dial-ptr" x1="70" y1="70" x2="70" y2="28"/>
+    <text class="dial-t" x="14" y="132">0</text><text class="dial-t" x="96" y="132">1023</text>
+  </svg>
+  <svg width="110" height="110" viewBox="0 0 100 100" role="img" aria-label="Animace blikající LED">
+    <circle id="a3h" class="led-halo" cx="50" cy="50" r="46" opacity="0"/><circle id="a3c" class="led-core" cx="50" cy="50" r="22" fill-opacity=".15"/>
+  </svg>
+  <div class="vals"><div class="val" id="a3v">hodnota = 0</div><div class="val" id="a3p" style="color:var(--muted)">pauza = 1000 ms</div></div>
+</div>
+<p class="cap">Čím víc je knoflík vpravo, tím kratší je pauza a LED bliká rychleji.</p>
+<button id="a3b" type="button">⏸ Pauza</button>
 <details>
 <summary>Nápověda 1: blikání</summary>
 <div class="hintbox">
@@ -247,6 +305,36 @@ btn.onclick=function(){var t=cur()==="dark"?"light":"dark";root.setAttribute("da
 paint();
 var u=document.getElementById("upd");
 if(u)u.textContent=new Date().getFullYear();
+
+// animace: mode = "plain" (blikání po 1 s), "dim" (jas podle knoflíku), "blink" (rychlost podle knoflíku)
+function demo(p,mode){
+  var $=function(s){return document.getElementById(p+s)};
+  var dial=$("d"),halo=$("h"),core=$("c"),vv=$("v"),vp=$("p"),bt=$("b");
+  var paused=false,acc=0,since=0,on=false,last=null;
+  function frame(ts){
+    if(last===null)last=ts;
+    var dt=Math.min(ts-last,100);last=ts;
+    if(!paused){acc+=dt;since+=dt}
+    var v=Math.round(1023*(1-Math.cos(2*Math.PI*acc/9000))/2),b=0;
+    if(mode==="dim"){
+      b=v/1023;vp.textContent=v===0?"LED nesvítí":(v>1000?"LED svítí naplno":"write_analog("+v+")");
+    }else if(mode==="blink"){
+      var pz=1000-Math.floor(v*950/1023);
+      if(since>=pz){since=0;on=!on}
+      b=on?1:0;vp.textContent="pauza = "+pz+" ms";
+    }else{
+      if(since>=1000){since=0;on=!on}
+      b=on?1:0;vp.textContent=on?"pin1.write_analog(1023)":"pin1.write_analog(0)";
+    }
+    if(dial){dial.setAttribute("transform","rotate("+(-135+v/1023*270)+" 70 70)");vv.textContent="hodnota = "+v}
+    halo.setAttribute("opacity",(b*.55).toFixed(3));
+    core.setAttribute("fill-opacity",(.15+.85*b).toFixed(3));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  bt.onclick=function(){paused=!paused;this.textContent=paused?"▶ Spustit":"⏸ Pauza"};
+}
+demo("m0","plain");demo("a1","dim");demo("a3","blink");
 })();
 </script>
 </body>
