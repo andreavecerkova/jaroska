@@ -75,7 +75,8 @@ a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
 .empty{border-style:dashed;color:var(--muted);font-size:16px}
 
 /* obrázek v kartě – je pod textem, takže nikdy nezakrývá název */
-.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto}
+/* obrázek leží na bílém „štítku“ v obou režimech */
+.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
 
 footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
@@ -101,7 +102,7 @@ footer a:hover{color:var(--acc)}
 
 <section id="temata">
   <div class="cards">
-    <a class="card big" href="microbit_tercie.html"><b>Micro:bit</b><span>Piny, senzory a další úlohy →</span><img class="pic" src="microbit.png" alt="" width="617" height="382"></a>
+    <a class="card big" href="microbit_tercie.html"><b>Micro:bit</b><span>Piny, senzory a další úlohy →</span><img class="pic" src="microbit.png" alt="" width="626" height="385"></a>
     <!-- Nová karta: <a class="card big" href="odkaz.html"><b>Název</b><span>Popis</span></a> -->
     <div class="card big soon"><b>Vektorová grafika</b><span></span></div>
     <div class="card big soon"><b>Rastrová grafika</b><span></span></div>
@@ -122,5 +123,4 @@ paint();
 </script>
 </body>
 </html>
-
 
