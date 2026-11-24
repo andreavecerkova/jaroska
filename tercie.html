@@ -75,8 +75,9 @@ a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
 .empty{border-style:dashed;color:var(--muted);font-size:16px}
 
 /* obrázek v kartě – je pod textem, takže nikdy nezakrývá název */
-/* obrázek leží na bílém „štítku“ v obou režimech */
-.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
+/* obrázek je průhledný; v tmavém režimu dostane jemný světle modrý obrys, aby byl vidět */
+.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto}
+:root[data-theme="dark"] .card .pic{filter:drop-shadow(0 0 1px var(--acc)) drop-shadow(0 0 1px var(--acc))}
 
 footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
 footer a{color:inherit}
@@ -123,4 +124,3 @@ paint();
 </script>
 </body>
 </html>
-
