@@ -62,6 +62,131 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset
 section{margin:0 0 34px}
 h2{font-size:24px;font-weight:700;margin:0 0 8px}
 .hint{color:var(--muted);font-size:16px;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;align-items:start}
+.card{display:block;background:var(--glass);border:1px solid var(--glass-line);border-radius:18px;padding:16px 18px;color:inherit;text-decoration:none;
+  box-shadow:0 4px 18px rgba(36,86,166,.10);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:border-color .15s,transform .15s}
+a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card b{display:block;font-weight:700;color:var(--acc);margin-bottom:2px}
+.card span{color:var(--muted);font-size:16px}
+.big{padding:24px 20px}
+.big b{font-size:26px;line-height:1.25}
+.empty{border-style:dashed;color:var(--muted);font-size:16px}
+
+/* obrázek v kartě – je pod textem, takže nikdy nezakrývá název */
+.card .pic{display:block;width:100%;max-width:260px;height:auto;margin:14px 0 0 auto}
+
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+
+:root[data-theme="dark"] .card{box-shadow:0 4px 18px rgba(0,0,0,.35)}
+:root[data-theme="dark"] .frame,:root[data-theme="dark"] .card{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<main>
+
+<header class="frame">
+  <div class="top">
+    <a class="back" href="index.html">← Zpět na Hlavní stránku</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
+  <h1>Tercie</h1>
+  <p class="sub">Informatika pro tercii. Vyberte téma.</p>
+</header>
+
+<section id="temata">
+  <div class="cards">
+    <a class="card big" href="microbit_tercie.html"><b>Micro:bit</b><span>Piny, senzory a další úlohy →</span><img class="pic" src="microbit.png" alt="" width="640" height="382"></a>
+    <!-- Nová karta: <a class="card big" href="odkaz.html"><b>Název</b><span>Popis</span></a> -->
+    <div class="card big soon"><b>Vektorová grafika</b><span></span></div>
+    <div class="card big soon"><b>Rastrová grafika</b><span></span></div>
+  </div>
+</section>
+
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková</footer>
+</main>
+
+<script>
+(function(){
+var btn=document.getElementById("theme"),root=document.documentElement;
+function cur(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function paint(){btn.textContent=cur()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=cur()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}paint()};
+paint();
+})();
+</script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t="light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Jaroška – Tercie</title>
+<style>
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lmroman-bold.otf") format("opentype")}
+
+:root{
+  --bg:#EEF3FB;--card:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;
+  --glass:rgba(255,255,255,.62);--glass-line:rgba(255,255,255,.9);--shadow:0 10px 40px rgba(36,86,166,.16);
+  --g1:rgba(61,123,255,.32);--g2:rgba(120,190,255,.38);--g3:rgba(36,86,166,.18);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#08101F;--card:#2B3240;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3A4353;--acc:#8DBBFF;
+  --glass:#2B3240;--glass-line:#3D4658;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --g1:rgba(61,123,255,.28);--g2:rgba(40,120,200,.22);--g3:rgba(90,70,200,.18)}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif;
+  display:flex;flex-direction:column;min-height:100vh;
+  min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+/* modré „aurora“ pozadí – je pevné, takže se nehýbe při scrollování */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60vmax 45vmax at 8% 0%,var(--g1),transparent 60%),
+    radial-gradient(55vmax 40vmax at 100% 18%,var(--g2),transparent 60%),
+    radial-gradient(50vmax 40vmax at 40% 105%,var(--g3),transparent 60%)}
+
+main{flex:1;width:100%;max-width:980px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column}
+
+/* hlavička jako rámeček */
+.frame{background:var(--glass);border:1px solid var(--glass-line);border-radius:22px;
+  padding:20px 24px 22px;margin:0 0 36px;box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+h1{font-size:38px;line-height:1.25;font-weight:700;margin:0}
+.back{display:inline-block;margin:0;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+.soon{border-style:dashed}
+.soon b{color:var(--ink)}
+.sub{color:var(--muted);margin:0;max-width:60ch}
+
+button{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--glass-line);background:var(--glass);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap;flex:none}
+button:hover{border-color:var(--acc)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+section{margin:0 0 34px}
+h2{font-size:24px;font-weight:700;margin:0 0 8px}
+.hint{color:var(--muted);font-size:16px;margin:0 0 12px}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .card{display:block;background:var(--glass);border:1px solid var(--glass-line);border-radius:18px;padding:16px 18px;color:inherit;text-decoration:none;
   box-shadow:0 4px 18px rgba(36,86,166,.10);
@@ -118,7 +243,7 @@ paint();
 })();
 </script>
 </body>
-</html>
+</html> -->
 
 
 
