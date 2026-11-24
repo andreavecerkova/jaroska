@@ -84,24 +84,29 @@ a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
 .empty{border-style:dashed;color:var(--muted);font-size:16px}
 
 
+/* barvy karet: t = tercie, k = kvarta, m = matematika */
 .card.t{--c:#1E8A5B}
 .card.k{--c:#D9642B}
+.card.m{--c:#7B4FD0}
 :root[data-theme="dark"] .card.t{--c:#6FD3A0}
 :root[data-theme="dark"] .card.k{--c:#FFA574}
+:root[data-theme="dark"] .card.m{--c:#B79CFF}
 @media (prefers-color-scheme:dark){
 :root:not([data-theme="light"]) .card.t{--c:#6FD3A0}
 :root:not([data-theme="light"]) .card.k{--c:#FFA574}
+:root:not([data-theme="light"]) .card.m{--c:#B79CFF}
 }
 
-.card.t,.card.k{
+.card.t,.card.k,.card.m{
 position:relative;overflow:hidden;
+border-color:color-mix(in srgb,var(--c) 35%,transparent);
 background:
   linear-gradient(135deg,color-mix(in srgb,var(--c) 14%,transparent),transparent 65%),
   var(--glass)}
-.card.t::before,.card.k::before{
+.card.t::before,.card.k::before,.card.m::before{
 content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
-.card.t b,.card.k b{color:var(--c)}
-a.card.t:hover,a.card.k:hover{border-color:var(--c);
+.card.t b,.card.k b,.card.m b{color:var(--c)}
+a.card.t:hover,a.card.k:hover,a.card.m:hover{border-color:var(--c);
 box-shadow:0 8px 28px color-mix(in srgb,var(--c) 28%,transparent)}
 
 footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
@@ -142,18 +147,15 @@ footer a:hover{color:var(--acc)}
 <section id="rocniky">
   <h2>Vyberte ročník</h2>
   <div class="cards">
-    <!-- <a class="card big" href="tercie.html"><b>Tercie</b><span>Materiály a úkoly pro tercii →</span></a>
-    <a class="card big" href="kvarta.html"><b>Kvarta</b><span>Materiály a úkoly pro kvartu →</span></a> -->
     <a class="card big t" href="tercie.html"><b>Tercie</b><span>Materiály a úkoly pro tercii →</span></a>
     <a class="card big k" href="kvarta.html"><b>Kvarta</b><span>Materiály a úkoly pro kvartu →</span></a>
   </div>
 </section>
 
 <section id="navic">
-  <h2>Další materiály</h2>
-  <p class="hint">Pro tercii i kvartu.</p>
+  <h2>Pro tercii i kvartu</h2>
   <div class="cards">
-    <a class="card big" href="navic.html"><b>Další materiály</b><span></span></a>
+    <a class="card big m" href="navic.html"><b>Další materiály</b><span>Informatika, matematika a další →</span></a>
   </div>
 </section>
 
@@ -171,3 +173,4 @@ paint();
 </script>
 </body>
 </html>
+
