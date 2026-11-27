@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}
+if(t!=="light"&&t!=="dark")t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.documentElement.setAttribute("data-theme",t)})();
+</script>
+<title>Piny III: Dotykový senzor – Jaroška</title>
+<style>
+@font-face{font-family:"LM Roman";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lmroman-regular.otf") format("opentype")}
+@font-face{font-family:"LM Roman";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lmroman-bold.otf") format("opentype")}
+
+:root{--bg:#EEF3FB;--card:#fff;--btn:#fff;--ink:#0F1F3D;--muted:#51617C;--line:#CFDBEE;--acc:#2456A6;--new:#D8431F;--ok:#1F7A4D;
+--shadow:0 10px 40px rgba(36,86,166,.14);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#08101F;--card:#2B3240;--btn:#343C4C;--ink:#EEF2F8;--muted:#A9B4C6;--line:#3D4658;--acc:#8DBBFF;--new:#FF8A63;--ok:#5BD08F;--shadow:0 10px 40px rgba(0,0,0,.5)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 18px/1.6 "LM Roman","Latin Modern Roman","CMU Serif",Georgia,serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 40px;display:flex;flex-direction:column;min-height:100vh;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+
+.frame{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 24px 20px;margin:0 0 8px;box-shadow:var(--shadow)}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
+.back{display:inline-block;color:var(--acc);text-decoration:none;font-size:16px}
+.back:hover{text-decoration:underline}
+h1{font-size:36px;line-height:1.25;font-weight:700;margin:0}
+h2{font-size:24px;font-weight:700;margin:32px 0 8px}
+a{color:var(--acc)}
+button{font:inherit;font-size:14px;line-height:1.4;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;white-space:nowrap}
+button:hover{border-color:var(--acc)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.task{border-left:4px solid var(--acc);margin:12px 0}
+.task b{color:var(--acc);display:block}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+img{max-width:100%;height:auto;max-height:420px;display:block;margin:0 auto;border-radius:12px;background:#fff}
+.demo{display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center}
+.base{fill:var(--bg);stroke:var(--line);stroke-width:3}
+.pad{fill:#F5D90A;stroke:#B89B00;stroke-width:3;cursor:pointer;transition:fill .15s}
+.pad.on{fill:var(--new)}
+.finger{fill:var(--muted);opacity:.0;transition:opacity .15s,transform .15s;transform:translateY(24px)}
+.finger.on{opacity:.55;transform:translateY(0)}
+.led{display:grid;grid-template-columns:repeat(5,28px);gap:5px;background:#10161D;padding:10px;border-radius:10px}
+.led i{width:28px;height:28px;border-radius:4px;background:#2A1A1A}
+.led i.on{background:#FF3B30;box-shadow:0 0 8px #FF3B30}
+.val{font:700 18px monospace;min-width:150px}
+.demo>div:not(.led){width:230px;flex:none}
+.muted{color:var(--muted);font-size:16px}
+code{font:15px monospace;background:var(--bg);padding:1px 6px;border-radius:6px}
+footer{color:var(--muted);font-size:15px;margin-top:auto;padding-top:40px}
+footer a{color:inherit}
+footer a:hover{color:var(--acc)}
+@media (max-width:520px){.frame{padding:16px 16px 18px;border-radius:18px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<main>
+<header class="frame">
+  <div class="top">
+    <a class="back" href="microbit_tercie.html">← Zpět na Micro:bit</a>
+    <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
+  </div>
+  <h1>Piny III: Dotykový senzor</h1>
+</header>
+
+<h2>Potřebné součásti</h2>
+<ul>
+<li>samozřejmě micro:bit</li>
+<li>rozšiřující deska <i>(Keyestudio Micro:bit Sensor Shield V2)</i></li>
+<li>kapacitní dotykový senzor <i>(Keyestudio Capacitive Touch Sensor)</i></li>
+<li>propojovací vodiče (drátky) × 3</li>
+</ul>
+
+<h2>Fungování dotykového senzoru</h2>
+<p>Senzor reaguje na dotek prstu na žluté plošce, a to i bez mačkání. Prst mírně změní elektrické vlastnosti plošky (její kapacitu) a modul to pozná. Micro:bit z něj čte jen dvě hodnoty: <b>1</b>, když se plošky dotýkáte, a <b>0</b>, když ne. Stačí tedy jeden pin a příkaz <code>digital read pin P0</code>.</p>
+
+<div class="box">
+  <div class="demo">
+    <svg id="s1" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Animace doteku na senzor">
+      <rect class="base" x="30" y="10" width="140" height="180" rx="16"/>
+      <rect id="pad1" class="pad" x="55" y="30" width="90" height="90" rx="12"/>
+      <ellipse id="fg1" class="finger" cx="100" cy="95" rx="26" ry="40"/>
+      <text x="100" y="160" text-anchor="middle" font-size="15" fill="currentColor" style="fill:var(--muted)">Touch module</text>
+    </svg>
+    <div>
+      <div class="val" id="v1">pin P0 = 0</div>
+      <div class="val" id="d1" style="color:var(--muted)">malé srdce</div>
+    </div>
+    <div class="led" id="led1" aria-label="Displej micro:bitu"></div>
+  </div>
+  <p class="muted" style="margin:12px 0 8px">Dotek se střídá sám. Můžete ho také vyzkoušet: stiskněte a držte žlutou plošku v obrázku. Pak se animace zastaví.</p>
+  <button id="pp1" type="button">Pauza</button>
+</div>
+
+<h2>Zapojení senzoru k micro:bitu</h2>
+<p>Modul má tři vývody: <b>+</b> (napájení), <b>S</b> (signál) a <b>−</b> (zem). Drátky zapojte takto:</p>
+<div class="scroll"><table>
+<tr><th>Vývod senzoru</th><th>Barva vodiče (drátku)</th><th>Pin na desce</th></tr>
+<tr><td>+ (napájení)</td><td>červený</td><td>V</td></tr>
+<tr><td>S (signál)</td><td>zelený</td><td>P0 (S)</td></tr>
+<tr><td>− (zem)</td><td>šedý</td><td>G</td></tr>
+</table></div>
+<p><img src="dotyk.png" alt="Schéma zapojení dotykového senzoru k micro:bitu"></p>
+
+<h2>Úlohy</h2>
+<div class="box task"><b>Úloha 1: Srdce</b>Když se dotknete senzoru, micro:bit ukáže velké srdce, jinak malé srdce. Použijte blok <i>pokud … jinak</i> a čtení pinu P0.</div>
+<div class="box task"><b>Úloha 2: Počítadlo dotyků</b>Každý dotek zvýší proměnné <i>počet</i> hodnotu o 1 a číslo se ukáže na displeji. Pozor: dokud držíte prst na místě, má se počítat jen jednou. Zkuste vymyslet, jak počkat, až prst pustíte. (viz animace)</div>
+
+
+<div class="box">
+  <div class="demo">
+    <svg id="s2" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Animace počítání dotyků">
+      <rect class="base" x="30" y="10" width="140" height="180" rx="16"/>
+      <rect id="pad2" class="pad" x="55" y="30" width="90" height="90" rx="12" style="cursor:default"/>
+      <ellipse id="fg2" class="finger" cx="100" cy="95" rx="26" ry="40"/>
+      <text x="100" y="160" text-anchor="middle" font-size="15" style="fill:var(--muted)">Touch module</text>
+    </svg>
+    <div>
+      <div class="val" id="c2">počet = 0</div>
+      <div class="val" id="m2" style="color:var(--muted);font-size:15px;min-width:190px;line-height:1.4">čekám na dotek</div>
+    </div>
+    <div class="led" id="led2" aria-label="Displej micro:bitu"></div>
+  </div>
+  <p class="muted" style="margin:12px 0 8px">Ukázka k úloze 2 (na displeji místo čísla svítí tolik diod, kolik bylo dotyků): počítá se při <b>pustění</b> prstu, takže dlouhý dotek se započítá jen jednou.</p>
+  <button id="pp2" type="button">Pauza</button>
+</div>
+<div class="box task"><b>Úloha 3: Morseovka</b>Krátký dotek (do půl sekundy) znamená tečku, dlouhý čárku. Micro:bit ukáže na displeji · nebo –. Pak zkuste poskládat písmeno, třeba S (···) a O (−−−).</div>
+
+<footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková · <span id="upd"></span></footer>
+</main>
+<script>
+(function(){
+function mk(id){var L=document.getElementById(id),C=[];for(var i=0;i<25;i++){var c=document.createElement("i");L.appendChild(c);C.push(c)}return C}
+function pic(C,s){var r=s.split(";");for(var y=0;y<5;y++)for(var x=0;x<5;x++)C[y*5+x].className=r[y][x]==="#"?"on":""}
+var BIG=".#.#.;#####;#####;.###.;..#..",SMALL=".....;.#.#.;.###.;..#..;.....";
+
+// demo 1
+var C1=mk("led1"),pad1=document.getElementById("pad1"),fg1=document.getElementById("fg1"),v1=document.getElementById("v1"),d1=document.getElementById("d1");
+var auto1=true,t1=false;
+function set1(t){t1=t;pad1.classList.toggle("on",t);fg1.classList.toggle("on",t);
+ v1.textContent="pin P0 = "+(t?1:0);d1.textContent=t?"velké srdce":"malé srdce";pic(C1,t?BIG:SMALL)}
+set1(false);
+setInterval(function(){if(auto1)set1(!t1)},1500);
+function dn(e){e.preventDefault();auto1=false;document.getElementById("pp1").textContent="▶ Spustit";set1(true)}
+function up(){if(!auto1)set1(false)}
+pad1.addEventListener("pointerdown",dn);
+window.addEventListener("pointerup",up);
+document.getElementById("pp1").onclick=function(){auto1=!auto1;if(auto1)set1(false);this.textContent=auto1?"⏸ Pauza":"▶ Spustit"};
+
+// demo 2
+var C2=mk("led2"),pad2=document.getElementById("pad2"),fg2=document.getElementById("fg2"),cnt=0,pz=false,ph=0;
+var hold=[1,0,2,0,1,0,3,0]; // délka dotyku v krocích, 0 = pauza mezi doteky
+function draw2(){C2.forEach(function(e,i){e.className=i<cnt?"on":""});document.getElementById("c2").textContent="počet = "+cnt}
+function touch2(t){pad2.classList.toggle("on",t);fg2.classList.toggle("on",t)}
+var seq=[["t","dotek začal, počítadlo čeká"],["r","prst pustěn → počet + 1"],["t","dlouhý dotek, pořád čekám"],["t","stále drží"],["r","prst pustěn → počet + 1"],["n","žádný dotek"]];
+function tick2(){if(pz)return;var s=seq[ph%seq.length];ph++;
+ touch2(s[0]==="t");
+ if(s[0]==="r"){cnt=cnt>=25?1:cnt+1;draw2()}
+ document.getElementById("m2").textContent=s[1]}
+draw2();setInterval(tick2,800);
+document.getElementById("pp2").onclick=function(){pz=!pz;this.textContent=pz?"▶ Spustit":"⏸ Pauza"};
+
+var btn=document.getElementById("theme"),root=document.documentElement;
+function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
+function pt(){btn.textContent=th()==="dark"?"☀️ Light mode":"🌙 Dark mode"}
+btn.onclick=function(){var t=th()==="dark"?"light":"dark";root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}pt()};
+pt();
+var u=document.getElementById("upd");
+if(u)u.textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
