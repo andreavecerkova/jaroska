@@ -67,7 +67,7 @@ footer a:hover{color:var(--acc)}
     <a class="back" href="microbit_tercie.html">← Zpět na Micro:bit</a>
     <button id="theme" type="button" aria-label="Toggle light/dark mode"></button>
   </div>
-  <h1>Piny III: Dotykový senzor</h1>
+  <h1>Piny II: Dotykový senzor</h1>
 </header>
 
 <h2>Potřebné součásti</h2>
@@ -95,23 +95,23 @@ footer a:hover{color:var(--acc)}
     </div>
     <div class="led" id="led1" aria-label="Displej micro:bitu"></div>
   </div>
-  <p class="muted" style="margin:12px 0 8px">Dotek se střídá sám. Můžete ho také vyzkoušet: stiskněte a držte žlutou plošku v obrázku. Pak se animace zastaví.</p>
+  <p class="muted" style="margin:12px 0 8px"></p>
   <button id="pp1" type="button">Pauza</button>
 </div>
 
 <h2>Zapojení senzoru k micro:bitu</h2>
-<p>Modul má tři vývody: <b>+</b> (napájení), <b>S</b> (signál) a <b>−</b> (zem). Drátky zapojte takto:</p>
+<p>Modul má tři vývody: <b>V</b> (napájení), <b>S</b> (signál) a <b>G</b> (zem). Drátky zapojte takto:</p>
 <div class="scroll"><table>
 <tr><th>Vývod senzoru</th><th>Barva vodiče (drátku)</th><th>Pin na desce</th></tr>
-<tr><td>+ (napájení)</td><td>červený</td><td>V</td></tr>
-<tr><td>S (signál)</td><td>zelený</td><td>P0 (S)</td></tr>
-<tr><td>− (zem)</td><td>šedý</td><td>G</td></tr>
+<tr><td>V (napájení)</td><td>červený</td><td>V</td></tr>
+<tr><td>S (signál)</td><td>zelený</td><td>S</td></tr>
+<tr><td>G (zem)</td><td>šedý</td><td>G</td></tr>
 </table></div>
 <p><img src="dotyk.png" alt="Schéma zapojení dotykového senzoru k micro:bitu"></p>
 
 <h2>Úlohy</h2>
-<div class="box task"><b>Úloha 1: Srdce</b>Když se dotknete senzoru, micro:bit ukáže velké srdce, jinak malé srdce. Použijte blok <i>pokud … jinak</i> a čtení pinu P0.</div>
-<div class="box task"><b>Úloha 2: Počítadlo dotyků</b>Každý dotek zvýší proměnné <i>počet</i> hodnotu o 1 a číslo se ukáže na displeji. Pozor: dokud držíte prst na místě, má se počítat jen jednou. Zkuste vymyslet, jak počkat, až prst pustíte. (viz animace)</div>
+<div class="box task"><b>Úloha 1: Srdce</b>Když se dotknete senzoru, micro:bit ukáže velké srdce, jinak malé srdce. Použijte ideáně blok <i>pokud … jinak</i> a čtení pinu P0.</div>
+<div class="box task"><b>Úloha 2: Počítadlo dotyků</b>Každý dotek zvýší proměnné <i>počet (nebo se může jmenovat jinak)</i> hodnotu o 1 a číslo se ukáže na displeji. Pozor: dokud držíte prst na místě, má se počítat jen jednou. Zkuste vymyslet, jak počkat, až prst pustíte. (viz animace)</div>
 
 
 <div class="box">
@@ -131,7 +131,7 @@ footer a:hover{color:var(--acc)}
   <p class="muted" style="margin:12px 0 8px">Ukázka k úloze 2 (na displeji místo čísla svítí tolik diod, kolik bylo dotyků): počítá se při <b>pustění</b> prstu, takže dlouhý dotek se započítá jen jednou.</p>
   <button id="pp2" type="button">Pauza</button>
 </div>
-<div class="box task"><b>Úloha 3: Morseovka</b>Krátký dotek (do půl sekundy) znamená tečku, dlouhý čárku. Micro:bit ukáže na displeji · nebo –. Pak zkuste poskládat písmeno, třeba S (···) a O (−−−).</div>
+<div class="box task"><b>Úloha 3: Morseovka</b>Krátký dotek (třeba do půl sekundy) znamená tečku, dlouhý čárku. Micro:bit ukáže na displeji · nebo –. Pak zkuste poskládat písmeno, třeba S (···) a O (−−−), buď si zkusit zakódovat nějakou zprávu na papír a ukázat ji spolužákovi, aniž by viděl nějaká slova nebo se to můžete pokusit i naprogramovat.</div>
 
 <footer><a href="https://www.jaroska.cz">Gymnázium Brno, třída Kapitána Jaroše</a> · Andrea Večerková · <span id="upd"></span></footer>
 </main>
@@ -152,7 +152,7 @@ function dn(e){e.preventDefault();auto1=false;document.getElementById("pp1").tex
 function up(){if(!auto1)set1(false)}
 pad1.addEventListener("pointerdown",dn);
 window.addEventListener("pointerup",up);
-document.getElementById("pp1").onclick=function(){auto1=!auto1;if(auto1)set1(false);this.textContent=auto1?"⏸ Pauza":"▶ Spustit"};
+document.getElementById("pp1").onclick=function(){auto1=!auto1;if(auto1)set1(false);this.textContent=auto1?"Pauza":"Spustit"};
 
 // demo 2
 var C2=mk("led2"),pad2=document.getElementById("pad2"),fg2=document.getElementById("fg2"),cnt=0,pz=false,ph=0;
@@ -165,7 +165,7 @@ function tick2(){if(pz)return;var s=seq[ph%seq.length];ph++;
  if(s[0]==="r"){cnt=cnt>=25?1:cnt+1;draw2()}
  document.getElementById("m2").textContent=s[1]}
 draw2();setInterval(tick2,800);
-document.getElementById("pp2").onclick=function(){pz=!pz;this.textContent=pz?"▶ Spustit":"⏸ Pauza"};
+document.getElementById("pp2").onclick=function(){pz=!pz;this.textContent=pz?"Spustit":"Pauza"};
 
 var btn=document.getElementById("theme"),root=document.documentElement;
 function th(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
